@@ -1,0 +1,1718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<meta name="description" content="">
+<meta name="author" content="">
+<link rel="icon" href="../favicon.ico">
+
+<title>Dashboard</title>
+
+<!-- Bootstrap core CSS -->
+<link href="../css/bootstrap.min.css" rel="stylesheet">
+<!-- Custom styles for this template -->
+<link href="../css/dashboard1.css" rel="stylesheet">
+<!--Baidu Echarts JS control-->
+<script src="../js/echarts.js"></script>
+
+<link rel="stylesheet" href="../js/jquery-ui.min.css">
+<link rel="stylesheet" href="../js/jquery-ui.structure.min.css">
+<link rel="stylesheet" href="../js/jquery-ui.theme.min.css">
+<script type="text/javascript" src="jquery-3.2.1.js"></script>
+<script src="../js/jquery-ui.min.js"></script>
+<link rel="stylesheet" href="../js/jquery-ui-AutoComplete.css">
+<script src="../js/jquery-ui-AutoComplete.js"></script>
+
+</head>
+
+<body>
+	<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+		<button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault"
+		 aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+		<a class="navbar-brand" href="#">Dashboard</a>
+
+		<div class="collapse navbar-collapse" id="navbarsExampleDefault">
+			<ul class="navbar-nav mr-auto">
+				<li class="nav-item active">
+					<a class="nav-link" href="index.html">Home <span class="sr-only">(current)</span></a>
+				</li>
+				<li class="nav-item">
+					<a class="nav-link" href="../index.html">Back</a>
+				</li>
+			</ul>
+			<form class="form-inline mt-2 mt-md-0">
+				<input class="form-control mr-sm-2" type="text" placeholder="Search">
+				<button class="btn btn-info" type="submit">Search</button>
+
+			</form>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+				<ul class="nav nav-pills flex-column">
+
+					<li class="nav-item">
+						<a class="nav-link active" href="index.html">Moodle charts<span class="sr-only">(current)</span></a>
+					</li>
+					<li class="nav-item">
+						<a class="nav-link" href="WebsubmissionCharts.html">WebSubmission charts</a>
+					</li>
+
+
+					<!--<li class="nav-item">
+                    <a class="nav-link" href="#">Analytics</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Export</a>
+                </li>-->
+				</ul>
+
+				<!--<ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Nav item</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Nav item again</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">One more nav</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Another nav item</a>
+                </li>
+            </ul>
+
+            <ul class="nav nav-pills flex-column">
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Nav item again</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">One more nav</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#">Another nav item</a>
+                </li>
+            </ul>-->
+			</nav>
+
+			<main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+				<h1>Dashboard</h1>
+				<select id="SelectCourse">
+						  <option  id="PleaseSelectCourse">Select course</option>
+
+						</select>
+				<select id="SelectYear">
+						  <option  id="PleaseSelectYear">SelectYear</option>
+						</select>
+				<select id="SelectSemester">
+						  <option  id="PleaseSelectSemester">SelectSemester</option>
+						</select>
+
+				<div id="Student activities overview" style="width: 800px;height:400px;"></div>
+				<div style="width: 250px;height:100px;position: relative;
+					  top: -400px;
+					  left: 820px;<!--background-color:yellow;-->">
+					<label for="StudentActivitiesOverViewSelect">Change Presentation Order</label>
+					<select id="StudentActivitiesOverViewSelect">
+						  <option  value ="1" selected = "selected">Alphabetical order</option>
+						  <option value ="2">Descending order</option>
+						  <option value="3">Ascending order</option>
+						</select></br>
+					</br>
+					<label for="from">Set period</label></br>
+					<label for="from">From</label>
+					<input type="text" id="StudentActivitiesOverviewFrom"></br>
+					<label for="to">To</label>&nbsp&nbsp&nbsp&nbsp
+					<input type="text" id="StudentActivitiesOverviewTo">
+					<button type="button" id="StudentActivitiesOverviewSetPeriod">Set period</button>
+					</br>
+					</br>
+					<label for="Threshold">Threshold (Amount of activities)</label>
+					</br>
+					<select id="StudentActivitiesOverViewThresholdSelect">
+						  <option  value =">" selected = "selected">></option>
+						  <option value =">=">>=</option>
+						  <option value="<"><</option>
+						  <option value="<="><=</option>
+						  <option value="=">=</option>
+						</select>
+					<input type="text" id="StudentActivitiesOverviewThreshold" value="0">
+					<button type="button" id="StudentActivitiesOverviewSetThreshold">Set threshold</button></br>
+					</br>
+
+					<button type="button" id="StudentActivitiesOverviewCSV">Export CSV</button>
+
+				</div>
+				<script type="text/javascript">
+					//DatePicker
+					$(document).ready(function () {
+
+						$("#StudentActivitiesOverviewFrom").datepicker({
+							defaultDate: "+1w",
+							changeMonth: true,
+							changeYear: true,
+							numberOfMonths: 3,
+							onClose: function (selectedDate) {
+								$("#StudentActivitiesOverviewTo").datepicker("option", "minDate", selectedDate);
+							}
+						});
+						$("#StudentActivitiesOverviewTo").datepicker({
+							defaultDate: "+1w",
+							changeMonth: true,
+							changeYear: true,
+							numberOfMonths: 3,
+							onClose: function (selectedDate) {
+								$("#StudentActivitiesOverviewFrom").datepicker("option", "maxDate", selectedDate);
+							}
+						});
+
+						//default date in "input"
+						$("#StudentActivitiesOverviewFrom").datepicker('setDate', "02/15/2013");//MM/DD/YYYY
+						$("#StudentActivitiesOverviewTo").datepicker('setDate', "07/27/2013");
+
+						$("#StudentActivitiesOverviewFrom").datepicker("option", "dateFormat", "yymmdd");
+						$("#StudentActivitiesOverviewTo").datepicker("option", "dateFormat", "yymmdd");
+
+					})
+
+					$(document).ready(function () {
+
+						//Load data for select course
+						$.ajax({
+							type: "get",
+							async: true,
+							url: "controller.php?type=loadCourse",
+							dataType: "json",
+							success: function (result) {
+								//console.log(result);
+								var CourseName = [];
+								$.each(result, function (i, p) {
+									CourseName[i] = p['CourseName'];
+									$("#SelectCourse").append(
+										" <option id='" + CourseName[i] + "'>"
+										+ CourseName[i] + "</option>");
+								});
+							}
+						});
+
+						//When users select course, load options for "select year"
+						$("#SelectCourse").change(function () {
+							// When users select course, remove all options in year and semester
+							$("#SelectYear option").remove();
+							$("#SelectSemester option").remove();
+							$("#SelectYear").append(
+								" <option id='PleaseSelectYear'>SelectYear</option>");
+							$("#SelectSemester").append(
+								" <option id='PleaseSelectSemester'>SelectSemester</option>");
+							//Get the course user chooses
+							var SelectCourseId = $("#SelectCourse option:selected").attr("id");
+							$.ajax({
+								type: "get",
+								async: true,
+								url: "controller.php?type=loadYear",
+								dataType: "json",
+								data: { "SelectCourseId": SelectCourseId },
+								success: function (result) {
+									var SchoolYear = [];
+									$.each(result, function (i, p) {
+										SchoolYear[i] = p['SchoolYear'];
+										$("#SelectYear").append(
+											" <option id='" + SchoolYear[i] + "'>"
+											+ SchoolYear[i] + "</option>");
+									});
+								}
+							});//ajax
+						});//change()
+
+						//When users select course and year, load options for "select semester"
+						$("#SelectYear").change(function () {
+							// When users select course and year, remove all options in semester
+							$("#SelectSemester option").remove();
+							$("#SelectSemester").append(
+								" <option id='PleaseSelectSemester'>SelectSemester</option>");
+							//Get the course and year user chooses
+							var SelectCourseId = $("#SelectCourse option:selected").attr("id");
+							var SelectYearId = $("#SelectYear option:selected").attr("id");
+							$.ajax({
+								type: "get",
+								async: true,
+								url: "controller.php?type=loadSemester",
+								dataType: "json",
+								data: { "SelectCourseId": SelectCourseId, "SelectYearId": SelectYearId },
+								success: function (result) {
+									var Semester = [];
+									$.each(result, function (i, p) {
+										Semester[i] = p['Semester'];
+										$("#SelectSemester").append(
+											" <option id='" + Semester[i] + "'>"
+											+ Semester[i] + "</option>");
+									});
+								}
+							});//ajax
+						});//change()
+
+
+					})//DocumentReady()
+
+
+
+
+
+
+
+
+
+
+
+
+					var StudentActivitiesOverViewAmount;
+					var StudentActivitiesOverViewDiff = 100;
+
+
+
+					// 基于准备好的dom，初始化echarts实例
+					var myChart6 = echarts.init(document.getElementById('Student activities overview'));
+
+					// 指定图表的配置项和数据
+					var option = {
+						title: {
+							text: 'Student activities overview'
+						},
+						tooltip: {},
+						/*legend: {
+							data:['Amount of activities']
+						},*/
+						xAxis: {
+							/*axisLabel :{  
+									interval:0, 
+									rotate:90
+							},*/
+							name: 'User',
+							data: []
+						},
+						yAxis: {
+							name: 'Amount of activities'
+						},
+						grid: {
+							x: 100,
+							y2: 100
+						},
+						dataZoom: [
+							{   // 这个dataZoom组件，默认控制x轴。
+								type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+								start: 0,      // 左边在 10% 的位置。
+								end: 100         // 右边在 60% 的位置。
+							}
+						],
+						series: [{
+							name: 'Amount of activities (in thousands)',
+							type: 'bar',
+							data: []
+						}],
+						toolbox: {
+							show: true,
+							feature: {
+								dataView: { readOnly: false },
+								magicType: { type: ['line', 'bar'] },
+								restore: {},
+								saveAsImage: {}
+							}
+						}
+					};
+
+					// 使用刚指定的配置项和数据显示图表。
+
+					myChart6.setOption(option);
+
+					myChart6.on('click', function (param) {
+						//console.log(param.name);
+						var from = $("#StudentActivitiesOverviewFrom").val();
+						var to = $("#StudentActivitiesOverviewTo").val();
+						//console.log(from);
+						//console.log(to);
+						var SelectCourseId = $("#SelectCourse option:selected").attr("id");
+						var SelectYearId = $("#SelectYear option:selected").attr("id");
+						var SelectSemesterId = $("#SelectSemester option:selected").attr("id");
+						var url = 'Student activities overview details.php?user=' + param.name + '&from=' + from + '&to=' + to + '&SelectCourseId=' + SelectCourseId + '&SelectYearId=' + SelectYearId + '&SelectSemesterId=' + SelectSemesterId;
+						window.open(url, "_blank");
+					});
+
+					function StudentActivitiesOverviewUpdate() {
+						var CourseName = $("#SelectCourse option:selected").attr("id");
+						var from = $("#StudentActivitiesOverviewFrom").val();
+						var to = $("#StudentActivitiesOverviewTo").val();
+						var order = $('#StudentActivitiesOverViewSelect').val();
+						var ThresholdSelect = $('#StudentActivitiesOverViewThresholdSelect').val();
+						var Threshold = $('#StudentActivitiesOverviewThreshold').val();
+						//console.log(from);
+						//console.log(to);
+						console.log(order);
+						$.ajax({
+							type: "get",
+							async: true, //异步执行
+							url: "controller.php?type=studentActivitiesOverview",
+							dataType: "json", //返回数据形式为json
+							data: { "from": from, "to": to, "order": order, "ThresholdSelect": ThresholdSelect, "Threshold": Threshold, "CourseName": CourseName },
+							success: function (result) {
+								console.log(result);
+								var name = [];
+								var count = [];
+								var amount = [];
+								$.each(result, function (i, p) {
+									name[i] = p['name'];
+									count[i] = p['count'];
+									amount[i] = p['amount'];
+								});
+								StudentActivitiesOverViewAmount = amount[0];
+								//alert(StudentActivitiesOverViewAmount);
+								myChart6.hideLoading();
+								//alert(StudentActivitiesOverViewDiff);
+								var StudentActivitiesOverViewRelativeAmount = StudentActivitiesOverViewDiff * StudentActivitiesOverViewAmount / 100;
+
+								if (StudentActivitiesOverViewRelativeAmount <= 8.15) {
+									myChart6.setOption({
+										xAxis: {
+											data: name,
+											axisLabel: {
+												show: true,
+												interval: 'auto',
+												rotate: 0
+											}
+										},
+										series: [{
+											// 根据名字对应到相应的系列
+											name: 'Amount of activities (in thousands)',
+											data: count
+										}]
+									});
+								}
+								else if (StudentActivitiesOverViewRelativeAmount <= 16.3) {
+									myChart6.setOption({
+										xAxis: {
+											data: name,
+											axisLabel: {
+												show: true,
+												interval: 0,
+												rotate: 40
+											}
+										},
+										series: [{
+											// 根据名字对应到相应的系列
+											name: 'Amount of activities (in thousands)',
+											data: count
+										}]
+									});
+								}
+								else if (StudentActivitiesOverViewRelativeAmount <= 48.9) {
+									myChart6.setOption({
+										xAxis: {
+											data: name,
+											axisLabel: {
+												show: true,
+												interval: 0,
+												rotate: 90
+											}
+										},
+										series: [{
+											// 根据名字对应到相应的系列
+											name: 'Amount of activities (in thousands)',
+											data: count
+										}]
+									});
+								}
+								else if (StudentActivitiesOverViewRelativeAmount > 48.9) {
+									myChart6.setOption({
+										xAxis: {
+											data: name,
+											axisLabel: {
+												show: false
+											}
+										},
+										series: [{
+											// 根据名字对应到相应的系列
+											name: 'Amount of activities (in thousands)',
+											data: count
+										}]
+									});
+								}
+							}
+						});
+
+					}
+
+					//choose semester
+					$(document).ready(function () {
+
+						$('#SelectSemester').change(function () {
+							var SelectCourseId = $("#SelectCourse option:selected").attr("id");
+							var SelectYearId = $("#SelectYear option:selected").attr("id");
+							var SelectSemesterId = $("#SelectSemester option:selected").attr("id");
+							var PeriodFrom;
+							var PeriodTo;
+							switch (SelectSemesterId) {
+								case "Semester 1":
+									PeriodFrom = SelectYearId + "0215";
+									PeriodTo = SelectYearId + "0727";
+									$("#StudentActivitiesOverviewFrom").val(PeriodFrom);
+									$("#StudentActivitiesOverviewTo").val(PeriodTo);
+									break;
+								case "Semester 2":
+									PeriodFrom = SelectYearId + "0728";
+									PeriodTo = SelectYearId + "1128";
+									$("#StudentActivitiesOverviewFrom").val(PeriodFrom);
+									$("#StudentActivitiesOverviewTo").val(PeriodTo);
+									break;
+							}
+							StudentActivitiesOverviewUpdate();
+						})
+					})
+
+					$(document).ready(function () {
+						$('#StudentActivitiesOverViewSelect').change(function () {
+							StudentActivitiesOverviewUpdate();
+						})
+					})
+
+					$(document).ready(function () {
+						$('#StudentActivitiesOverviewSetPeriod').click(function () {
+							StudentActivitiesOverviewUpdate();
+						})
+					})
+
+					$(document).ready(function () {
+						$('#StudentActivitiesOverviewSetThreshold').click(function () {
+							StudentActivitiesOverviewUpdate();
+						})
+					})
+
+					//export csv for the chart StudentActivitiesOverview
+					$(document).ready(function () {
+						$('#StudentActivitiesOverviewCSV').click(function () {
+
+							var SelectCourseId = $("#SelectCourse option:selected").attr("id");
+							var SelectYearId = $("#SelectYear option:selected").attr("id");
+							var SelectSemesterId = $("#SelectSemester option:selected").attr("id");
+							var from = $("#StudentActivitiesOverviewFrom").val();
+							var to = $("#StudentActivitiesOverviewTo").val();
+							//console.log(from);
+							//console.log(to);
+							var order = $('#StudentActivitiesOverViewSelect').val();
+							var ThresholdSelect = $('#StudentActivitiesOverViewThresholdSelect').val();
+							var Threshold = $('#StudentActivitiesOverviewThreshold').val();
+							//console.log(order);
+							//console.log(ThresholdSelect);
+							//console.log(Threshold);
+							var url = 'Student activities overview csv.php?action=export&from=' + from + '&to=' + to + '&order=' + order + '&ThresholdSelect=' + ThresholdSelect + '&Threshold=' + Threshold + '&SelectCourseId=' + SelectCourseId + '&SelectYearId=' + SelectYearId + '&SelectSemesterId=' + SelectSemesterId;
+							console.log(url);
+							window.location.href = url;
+
+						})
+					})
+
+
+
+					StudentActivitiesOverviewUpdateDefault();
+
+					myChart6.on('datazoom', function (params) {
+						/*var opt = myChart.getOption();
+						var dz = opt.dataZoom[0];
+						var tstart = opt.xAxis[0].data[dz.startValue];
+						$('#CurrentStart').val(tstart);
+						var tend = opt.xAxis[0].data[dz.endValue];
+						$('#CurrentEnd').val(tend);*/
+						//console.log(params.end);
+						//console.log(params);
+						//console.log(params.start);
+						var diff = params.end - params.start;
+						StudentActivitiesOverViewDiff = diff;
+						console.log(diff);
+						console.log(StudentActivitiesOverViewAmount);
+						var StudentActivitiesOverViewRelativeAmount = diff * StudentActivitiesOverViewAmount / 100;
+						console.log(StudentActivitiesOverViewRelativeAmount);
+						if (StudentActivitiesOverViewRelativeAmount < 8.15) {
+							myChart6.setOption({
+								xAxis: {
+									axisLabel: {
+										show: true,
+										interval: 'auto',
+										rotate: 0
+									}
+
+								}
+							});
+						}
+						else if (StudentActivitiesOverViewRelativeAmount < 16.3) {
+							myChart6.setOption({
+								xAxis: {
+									axisLabel: {
+										show: true,
+										interval: 0,
+										rotate: 40
+									}
+
+								}
+							});
+						}
+						else if (StudentActivitiesOverViewRelativeAmount < 48.9) {
+							myChart6.setOption({
+								xAxis: {
+									axisLabel: {
+										show: true,
+										interval: 0,
+										rotate: 90
+									}
+
+								}
+							});
+						}
+						else if (StudentActivitiesOverViewRelativeAmount >= 48.9) {
+							myChart6.setOption({
+								xAxis: {
+									axisLabel: {
+										show: false
+									}
+
+								}
+							});
+						}
+
+					});
+				</script>
+
+
+
+
+				<div id="All events overview" style="width: 800px;height:400px;"></div>
+				<div style="width: 200px;height:100px;position: relative;
+					  top: -400px;
+					  left: 820px;<!--background-color:yellow;-->">
+					<select id="AllEventsOverViewSelect">
+						  <option  value ="1">Year view</option>
+						  <option value ="2">Month view</option>
+						  <option value="3" selected = "selected">Day view</option>
+						</select>
+
+					<select id="AllEventsOverviewSelectOrder">
+						  <option  value ="1" selected = "selected">Alphabetical order</option>
+						  <option value ="2">Descending order</option>
+						  <option value="3">Ascending order</option>
+						</select></br>
+					</br>
+
+					<label for="from">From</label>
+					<input type="text" id="AllEventsOverviewFrom">
+					<label for="to">To</label>
+					<input type="text" id="AllEventsOverviewTo">
+					<button type="button" id="AllEventsOverviewSetPeriod">Set period</button>
+					</br>
+					</br>
+					<label for="Threshold">Threshold (Amount of activities)</label>
+					</br>
+					<select id="AllEventsOverviewThresholdSelect">
+						  <option  value =">" selected = "selected">></option>
+						  <option value =">=">>=</option>
+						  <option value="<"><</option>
+						  <option value="<="><=</option>
+						  <option value="=">=</option>
+						</select>
+					<input type="text" id="AllEventsOverviewThreshold" value="0">
+					<button type="button" id="AllEventsOverviewSetThreshold">Set threshold</button></br>
+					</br>
+
+
+
+					<input type="button" class="ExportCSVAllEventsOverView" value="Export CSV">
+					<!--<input type="text" id="CurrentStart">
+					<input type="text" id="CurrentEnd">-->
+
+					<script type="text/javascript">
+						$(".ExportCSVAllEventsOverView").click(function () {
+							// var year = $("#year option:selected").val();
+							// var month = $("#month option:selected").val();
+							// url = '&year='+year+'&month='+month;
+							var view = $('#AllEventsOverViewSelect').val();
+							var url = 'Forum events overview csv.php?action=export&view=' + view;
+							//alert(url);
+							window.location.href = url;
+
+						})
+					</script>
+
+
+
+				</div>
+
+
+
+				<script type="text/javascript">
+						var AllEventsOverViewAmount;
+
+
+						var myChart = echarts.init(document.getElementById('All events overview'));
+
+						// 指定图表的配置项和数据
+						var option = {
+							title: {
+								text: 'All activities overview'
+							},
+							tooltip: {},
+							/*legend: {
+								data:['Amount of activities']
+							},*/
+							xAxis: {
+								data: []
+							},
+							yAxis: {
+								name: 'Amount of activities (in thousands)'
+							},
+							grid: { // 控制图的大小，调整下面这些值就可以，
+								x: 100,
+								y2: 110
+							},
+							dataZoom: [
+								{   // 这个dataZoom组件，默认控制x轴。
+									type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+									start: 0,      // 左边在 10% 的位置。
+									end: 100         // 右边在 60% 的位置。
+								}
+							],
+							series: [{
+								name: 'Amount of activities (in thousands)',
+								type: 'bar',
+								data: []
+							}],
+							toolbox: {
+								show: true,
+								feature: {
+									/*dataZoom: {
+										yAxisIndex: 'none'
+									},*/
+									dataView: { readOnly: false },
+									magicType: { type: ['line', 'bar'] },
+									restore: {},
+									saveAsImage: {}
+								}
+							}
+						};
+
+						// 使用刚指定的配置项和数据显示图表。
+
+						myChart.setOption(option);
+
+
+
+
+
+
+						AllEventsAj3();
+
+						//add onchange event for select
+						$(document).ready(function () {
+							$('#AllEventsOverViewSelect').change(function () {
+								var rs = $('#AllEventsOverViewSelect').val();
+								//alert(rs=="3");
+								switch (rs) {
+									case "1":
+										console.log("case 1");
+										AllEventsAj1();
+										break;
+									case "2":
+										console.log("case 2");
+										AllEventsAj2();
+										break;
+									case "3":
+										console.log("case 3");
+										AllEventsAj3();
+										break;
+
+								}
+
+							})
+						})
+
+
+						myChart.on('datazoom', function (params) {
+							/*var opt = myChart.getOption();
+							var dz = opt.dataZoom[0];
+							var tstart = opt.xAxis[0].data[dz.startValue];
+							$('#CurrentStart').val(tstart);
+							var tend = opt.xAxis[0].data[dz.endValue];
+							$('#CurrentEnd').val(tend);*/
+							//console.log(params.end);
+							//console.log(params);
+							//console.log(params.start);
+							var diff = params.end - params.start;
+							console.log(diff);
+							console.log(AllEventsOverViewAmount);
+							var AllEventsOverViewRelativeAmount = diff * AllEventsOverViewAmount / 100;
+							console.log(AllEventsOverViewRelativeAmount);
+							var AllEventsOverViewSelectValue = $('#AllEventsOverViewSelect').val();
+							if (AllEventsOverViewRelativeAmount < 8.15 && AllEventsOverViewSelectValue == "3") {
+								myChart.setOption({
+									xAxis: {
+										axisLabel: {
+											show: true,
+											interval: 'auto',
+											rotate: 0
+										},
+
+									}
+								});
+							}
+							else if (AllEventsOverViewRelativeAmount < 16.3 && AllEventsOverViewSelectValue == "3") {
+								myChart.setOption({
+									xAxis: {
+										axisLabel: {
+											show: true,
+											interval: 0,
+											rotate: 40
+										},
+
+									}
+								});
+							}
+							else if (AllEventsOverViewRelativeAmount < 48.9 && AllEventsOverViewSelectValue == "3") {
+								myChart.setOption({
+									xAxis: {
+										axisLabel: {
+											show: true,
+											interval: 0,
+											rotate: 90
+										},
+
+									}
+								});
+							}
+							else if (AllEventsOverViewRelativeAmount >= 48.9 && AllEventsOverViewSelectValue == "3") {
+								myChart.setOption({
+									xAxis: {
+										axisLabel: {
+											show: false
+										},
+
+									}
+								});
+							}
+
+						});
+
+
+						function AllEventsAj1() {
+							$.ajax({
+								type: "post",
+								async: true, //异步执行
+								url: "Forum events overview year.php",
+								dataType: "json", //返回数据形式为json
+								success: function (result) {
+									console.log(result);
+									var day = [];
+									var count = [];
+									$.each(result, function (i, p) {
+										day[i] = p['day'];
+										count[i] = p['count'];
+									});
+									myChart.hideLoading();
+									myChart.setOption({
+										xAxis: {
+											axisLabel: {
+												show: true,
+												interval: 'auto',
+												rotate: 0
+											},
+											name: 'Year',
+											data: day
+										},
+
+										series: [{
+											// 根据名字对应到相应的系列
+											name: 'Amount of activities (in thousands)',
+											data: count
+										}]
+									});
+								}
+							})
+
+						}
+
+
+
+						function AllEventsAj2() {
+							$.ajax({
+								type: "post",
+								async: true, //异步执行
+								url: "Forum events overview month.php",
+								dataType: "json", //返回数据形式为json
+								success: function (result) {
+									console.log(result);
+									var day = [];
+									var count = [];
+									$.each(result, function (i, p) {
+										day[i] = p['day'];
+										count[i] = p['count'];
+									});
+									myChart.hideLoading();
+									myChart.setOption({
+										xAxis: {
+											axisLabel: {
+												show: true,
+												interval: 0,
+												rotate: 40
+											},
+											name: 'Month',
+											data: day
+										},
+
+										series: [{
+											// 根据名字对应到相应的系列
+											name: 'Amount of activities (in thousands)',
+											data: count
+										}]
+									});
+								}
+							})
+
+						}
+
+
+						function AllEventsAj3() {
+							$.ajax({
+								type: "post",
+								async: true, //异步执行
+								url: "Forum events overview.php",
+								dataType: "json", //返回数据形式为json
+								success: function (result) {
+									console.log(result);
+									var day = [];
+									var count = [];
+									var amount = [];
+									$.each(result, function (i, p) {
+										day[i] = p['day'];
+										count[i] = p['count'];
+										amount[i] = p['amount'];
+									});
+									AllEventsOverViewAmount = amount[0];
+									//alert(AllEventsOverViewAmount);
+									myChart.hideLoading();
+									myChart.setOption({
+										xAxis: {
+											axisLabel: {
+												show: false,
+												interval: 'auto',
+												rotate: 0
+											},
+											name: 'Day',
+											data: day
+										},
+										series: [{
+											// 根据名字对应到相应的系列
+											name: 'Amount of activities (in thousands)',
+											data: count
+
+										}]
+									});
+								}
+							})
+
+						}
+				</script>
+
+				<div id="Different events overview" style="width:800px;height:400px;"></div>
+				<div style="width: 180px;height:100px;position: relative;
+					  top: -400px;
+					  left: 820px;<!--background-color:yellow;-->">
+					<select id="DifferentEventsOverviewSelect">
+						  <option  value ="1" selected = "selected">Alphabetical order</option>
+						  <option value ="2">Descending order</option>
+						  <option value="3">Ascending order</option>
+						</select></br>
+					</br>
+
+					<label for="from">From</label>
+					<input type="text" id="from" name="from">
+					<label for="to">To</label>
+					<input type="text" id="to" name="to">
+					<button type="button" id="SetPeriod">Set period</button></br>
+					</br>
+
+					<label for="Threshold">Threshold (Amount of activities)</label>
+					</br>
+					<select id="DifferentEventsOverviewThresholdSelect">
+						  <option  value =">" selected = "selected">></option>
+						  <option value =">=">>=</option>
+						  <option value="<"><</option>
+						  <option value="<="><=</option>
+						  <option value="=">=</option>
+						</select>
+					<input type="text" id="DifferentEventsOverviewThreshold" value="0">
+					<button type="button" id="DifferentEventsOverviewSetThreshold">Set threshold</button></br>
+					</br>
+
+					<button type="button" id="DifferentEventsOverviewCSV">Export CSV</button>
+
+
+				</div>
+
+				<script type="text/javascript">
+					//DatePicker
+					$(function () {
+						/* $( "#from" ).datepicker({
+						   defaultDate: "+1w",
+						   changeMonth: true,
+						   changeYear: true,
+						   numberOfMonths: 3,
+						   onClose: function( selectedDate ) {
+							 $( "#to" ).datepicker( "option", "minDate", selectedDate );
+						   }
+						 });
+						 $( "#to" ).datepicker({
+						   defaultDate: "+1w",
+						   changeMonth: true,
+						   changeYear: true,
+						   numberOfMonths: 3,
+						   onClose: function( selectedDate ) {
+							 $( "#from" ).datepicker( "option", "maxDate", selectedDate );
+						   }
+						 });
+						 $( "#from" ).datepicker( "option", "dateFormat", "yymmdd" );
+						 $( "#to" ).datepicker( "option", "dateFormat", "yymmdd" );
+						 $( "#from" ).datepicker('setDate', "07/15/2012");//MM/DD/YYYY
+						 $( "#to" ).datepicker('setDate', "07/21/2014");*/
+
+
+						$("#from").datepicker({
+							defaultDate: "+1w",
+							changeMonth: true,
+							changeYear: true,
+							numberOfMonths: 3,
+							onClose: function (selectedDate) {
+								$("#to").datepicker("option", "minDate", selectedDate);
+							}
+						});
+						$("#to").datepicker({
+							defaultDate: "+1w",
+							changeMonth: true,
+							changeYear: true,
+							numberOfMonths: 3,
+							onClose: function (selectedDate) {
+								$("#from").datepicker("option", "maxDate", selectedDate);
+							}
+						});
+
+						//default date in "input"
+						$("#from").datepicker('setDate', "07/15/2012");//MM/DD/YYYY
+						$("#to").datepicker('setDate', "07/21/2014");
+
+						$("#from").datepicker("option", "dateFormat", "yymmdd");
+						$("#to").datepicker("option", "dateFormat", "yymmdd");
+					});
+
+
+
+
+
+
+					// 基于准备好的dom，初始化echarts实例
+					var myChart2 = echarts.init(document.getElementById('Different events overview'));
+
+					// 指定图表的配置项和数据
+					var option = {
+						title: {
+							text: 'Different events overview'
+						},
+						tooltip: {},
+						/*legend: {
+							data:[]
+						},*/
+						xAxis: {
+							axisLabel: {
+								interval: 0,
+								rotate: 90
+							},
+							name: 'Event name',
+							data: []
+						},
+						grid: { // 控制图的大小，调整下面这些值就可以，
+							x: 100,
+							//x2: 100,
+							y2: 150// y2可以控制 X轴跟Zoom控件之间的间隔，避免以为倾斜后造成 label重叠到zoom上
+						},
+						yAxis: {
+							name: 'Amount of activities (in thousands)'
+						},
+						/*dataZoom: [
+							{   // 这个dataZoom组件，默认控制x轴。
+								type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+								start: 57,      // 左边在 10% 的位置。
+								end: 62         // 右边在 60% 的位置。
+							}
+						],*/
+						series: [{
+							name: 'Amount of activities (in thousands)',
+							type: 'bar',
+							data: []
+						}],
+						toolbox: {
+							show: true,
+							feature: {
+								/*dataZoom: {
+									yAxisIndex: 'none'
+								},*/
+								dataView: { readOnly: false },
+								magicType: { type: ['line', 'bar'] },
+								restore: {},
+								saveAsImage: {}
+							}
+						}
+					};
+
+					// 使用刚指定的配置项和数据显示图表。
+
+					myChart2.setOption(option);
+
+					$.ajax({
+						type: "post",
+						async: true, //异步执行
+						url: "Different events overview.php",
+						dataType: "json", //返回数据形式为json
+						success: function (result) {
+							console.log(result);
+							var name = [];
+							var count = [];
+							$.each(result, function (i, p) {
+								name[i] = p['name'];
+								count[i] = p['count'];
+							});
+							myChart2.hideLoading();
+							myChart2.setOption({
+								xAxis: {
+									data: name
+								},
+								series: [{
+									// 根据名字对应到相应的系列
+									name: 'Amount of activities (in thousands)',
+									data: count
+								}]
+							});
+						}
+					});
+
+					function SetPeriod() {
+						var from = $("#from").val();
+						var to = $("#to").val();
+						console.log(from);
+						console.log(to);
+						$.ajax({
+							type: "post",
+							async: true, //异步执行
+							url: "Different events overview period.php",
+							dataType: "json", //返回数据形式为json
+							data: { from: from, to: to },
+							success: function (result) {
+								console.log(result);
+								var name = [];
+								var count = [];
+								$.each(result, function (i, p) {
+									name[i] = p['name'];
+									count[i] = p['count'];
+								});
+								myChart2.hideLoading();
+								myChart2.setOption({
+									xAxis: {
+										data: name
+									},
+									series: [{
+										// 根据名字对应到相应的系列
+										name: 'Amount of activities (in thousands)',
+										data: count
+									}]
+								});
+							}
+						});
+
+					}
+
+
+
+					$(document).ready(function () {
+						$('#SetPeriod').click(function () {
+							SetPeriod();
+
+
+
+						})
+					})
+				</script>
+
+
+
+				<div id="Resource view" style="width: 800px;height:400px;"></div>
+				<div style="width: 200px;height:100px;position: relative;
+					  top: -400px;
+					  left: 870px;<!--background-color:yellow;-->">
+					<label for="Threshold">Event Name</label>
+					<input type="text" id="EventName" /></br>
+					<label for="Threshold">Threshold (Amount of activities in Different events overview)</label>
+					<input type="text" id="EventNameThreshold" value="500" /></br>
+					<button type="button" id="EventNameButton">Set</button></br>
+					<select id="EventNameSelect">
+						  <option  value ="1">Year view</option>
+						  <option value ="2">Month view</option>
+						  <option value="3" selected = "selected">Day view</option>
+						</select>
+
+					<select id="EventNameSelectOrder">
+						  <option  value ="1" selected = "selected">Alphabetical order</option>
+						  <option value ="2">Descending order</option>
+						  <option value="3">Ascending order</option>
+						</select></br>
+
+					<label for="from">From</label>
+					<input type="text" id="EventNameFrom">
+					<label for="to">To</label>
+					<input type="text" id="EventNameTo">
+					<button type="button" id="EventNameSetPeriod">Set period</button>
+					</br>
+					<label for="Threshold">Threshold (Amount of activities)</label>
+					</br>
+					<select id="EventNameThresholdSelect">
+						  <option  value =">" selected = "selected">></option>
+						  <option value =">=">>=</option>
+						  <option value="<"><</option>
+						  <option value="<="><=</option>
+						  <option value="=">=</option>
+						</select>
+					<input type="text" id="EventNameThreshold2" value="0">
+					<button type="button" id="EventNameSetThreshold">Set threshold</button></br>
+
+					<button type="button" id="EventNameCSV">Export CSV</button>
+
+
+
+				</div>
+				</br>
+				</br>
+				</br>
+				</br>
+				</br>
+				<script type="text/javascript">
+					//auto-complete
+					$(document).ready(function () {
+						src = "EventNameAutoComplete.php";
+
+						$("#EventName").autocomplete({
+							source: function (request, response) {
+								$.ajax({
+									url: src,
+									dataType: "json",
+									data: {
+										term: request.term,
+										EventNameThreshold: $("#EventNameThreshold").val()
+									},
+									success: function (data) {
+										response(data);
+									}
+								});
+							},
+							min_length: 3,
+							delay: 300
+						});
+					});
+
+
+
+
+
+
+
+
+					// 基于准备好的dom，初始化echarts实例
+					var myChart3 = echarts.init(document.getElementById('Resource view'));
+
+					// 指定图表的配置项和数据
+					var option = {
+						title: {
+							text: 'Resource view'
+						},
+						tooltip: {},
+						/*legend: {
+							data:['Amount of activities']
+						},*/
+						xAxis: {
+							data: []
+						},
+						yAxis: {
+							name: 'Amount of activities'
+						},
+						dataZoom: [
+							{   // 这个dataZoom组件，默认控制x轴。
+								type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+								start: 0,      // 左边在 10% 的位置。
+								end: 100         // 右边在 60% 的位置。
+							}
+						],
+						series: [{
+							name: 'Amount of activities',
+							type: 'bar',
+							data: []
+						}],
+						toolbox: {
+							show: true,
+							feature: {
+								dataView: { readOnly: false },
+								magicType: { type: ['line', 'bar'] },
+								restore: {},
+								saveAsImage: {}
+							}
+						}
+					};
+
+					// 使用刚指定的配置项和数据显示图表。
+
+					myChart3.setOption(option);
+
+
+
+					function EventNameAj() {
+						var EventName = $('#EventName').val();
+						$.ajax({
+							type: "post",
+							async: true, //异步执行
+							url: "EventName.php",
+							data: { "EventName": EventName },
+							dataType: "json", //返回数据形式为json
+							success: function (result) {
+								console.log(result);
+								var day = [];
+								var count = [];
+								$.each(result, function (i, p) {
+									day[i] = p['day'];
+									count[i] = p['count'];
+								});
+								myChart3.hideLoading();
+								myChart3.setOption({
+									title: {
+										text: EventName
+									},
+									xAxis: {
+										name: 'Day',
+										data: day
+									},
+
+									series: [{
+										// 根据名字对应到相应的系列
+										name: 'Amount of activities',
+										data: count
+									}]
+								});
+							}
+						});
+					}
+
+
+					$(document).ready(function () {
+						$('#EventNameButton').click(function () {
+							EventNameAj();
+						})
+					})
+
+
+					function ResourceViewAj3() {
+						$.ajax({
+							type: "post",
+							async: true, //异步执行
+							url: "Resource view.php",
+							dataType: "json", //返回数据形式为json
+							success: function (result) {
+								console.log(result);
+								var day = [];
+								var count = [];
+								$.each(result, function (i, p) {
+									day[i] = p['day'];
+									count[i] = p['count'];
+								});
+								myChart3.hideLoading();
+								myChart3.setOption({
+									title: {
+										text: 'Resource view'
+									},
+									xAxis: {
+										axisLabel: {
+											interval: 'auto',
+											rotate: 0
+										},
+										name: 'Day',
+										data: day
+									},
+
+									series: [{
+										// 根据名字对应到相应的系列
+										name: 'Amount of activities',
+										data: count
+									}]
+								});
+							}
+						});
+					}
+
+					ResourceViewAj3();
+
+					//add onchange event for select
+					$(document).ready(function () {
+						$('#ResourceViewSelect').change(function () {
+							var rs = $('#ResourceViewSelect').val();
+							//alert(typeof rs);
+							switch (rs) {
+								case "1":
+									console.log("case 1");
+									ResourceViewAj1();
+									break;
+								case "2":
+									console.log("case 2");
+									ResourceViewAj2();
+									break;
+								case "3":
+									console.log("case 2");
+									ResourceViewAj3();
+									break;
+
+							}
+
+						})
+					})
+				</script>
+
+				<!--<div id="Grade distribution" style="width: 600px;height:400px;"></div>-->
+				<script type="text/javascript">
+					/*
+        // 基于准备好的dom，初始化echarts实例
+        var myChart4 = echarts.init(document.getElementById('Grade distribution'));
+
+        // 指定图表的配置项和数据
+	var option = {
+    backgroundColor: '#2c343c',
+
+    title: {
+        text: 'Grade distribution',
+        left: 'center',
+        top: 20,
+        textStyle: {
+            color: '#ccc'
+        }
+    },
+
+    tooltip : {
+        trigger: 'item',
+        formatter: "{a} <br/>{b} : {c} ({d}%)"
+    },
+
+    visualMap: {
+        show: false,
+        min: 80,
+        max: 600,
+        inRange: {
+            colorLightness: [0, 1]
+        }
+    },
+    series : [
+        {
+            name:'Grade',
+            type:'pie',
+            radius : '55%',
+            center: ['50%', '50%'],
+            data:[],
+            roseType: 'angle',
+            label: {
+                normal: {
+                    textStyle: {
+                        color: 'rgba(255, 255, 255, 0.3)'
+                    }
+                }
+            },
+            labelLine: {
+                normal: {
+                    lineStyle: {
+                        color: 'rgba(255, 255, 255, 0.3)'
+                    },
+                    smooth: 0.2,
+                    length: 10,
+                    length2: 20
+                }
+            },
+            itemStyle: {
+                normal: {
+                    color: '#c23531',
+                    shadowBlur: 200,
+                    shadowColor: 'rgba(0, 0, 0, 0.5)'
+                }
+            },
+
+            animationType: 'scale',
+            animationEasing: 'elasticOut',
+            animationDelay: function (idx) {
+                return Math.random() * 200;
+            }
+        }
+    ]
+};
+
+        // 使用刚指定的配置项和数据显示图表。
+
+        myChart4.setOption(option);
+
+$.ajax({
+	type: "post",
+    async: true, //异步执行
+    url: "Grade distribution.php",
+    dataType: "json", //返回数据形式为json
+    success: function(result) {
+		console.log(result);
+		
+		var grade = [];
+        var count = [];
+        $.each(result,function(i,p){
+          grade[i]=p['grade'];		
+          count[i]=p['count'];
+		  console.log(grade[i]);
+		  console.log(count[i]);
+        });	
+		count[3]=15000;
+		var array = [];
+		for(i = 0 ;i<=4;i++ ){
+		//alert(str.name[i]+"===========》"+str.id[i]);
+		var map ={};
+		map.name = grade[i];
+		map.value =count[i];
+		array[i]=map;
+		}
+
+
+
+		myChart4.hideLoading();
+		myChart4.setOption({
+			series: [{
+				// 根据名字对应到相应的系列
+				name: 'Grade',
+				data:  array
+			}]
+		});
+	}
+}); */
+				</script>
+
+				<div id="Sample exam access" style="width: 800px;height:400px;"></div>
+				<div style="width: 200px;height:100px;position: relative;
+					  top: -400px;
+					  left: 870px;<!--background-color:yellow;-->">
+					<select id="SampleExamSelect">
+						  <option  value ="1">Year view</option>
+						  <option value ="2">Month view</option>
+						  <option value="3" selected = "selected">Day view</option>
+						</select>
+				</div>
+				<script type="text/javascript">
+					// 基于准备好的dom，初始化echarts实例
+					var myChart5 = echarts.init(document.getElementById('Sample exam access'));
+
+					// 指定图表的配置项和数据
+					var option = {
+						title: {
+							text: 'Sample exam access'
+						},
+						tooltip: {},
+						/*legend: {
+							data:['Amount of activities']
+						},*/
+						xAxis: {
+							data: []
+						},
+						yAxis: {
+							name: 'Amount of activities'
+						},
+						dataZoom: [
+							{   // 这个dataZoom组件，默认控制x轴。
+								type: 'slider', // 这个 dataZoom 组件是 slider 型 dataZoom 组件
+								start: 0,      // 左边在 10% 的位置。
+								end: 100         // 右边在 60% 的位置。
+							}
+						],
+						series: [{
+							name: 'Amount of activities',
+							type: 'bar',
+							data: []
+						}],
+						toolbox: {
+							show: true,
+							feature: {
+								dataView: { readOnly: false },
+								magicType: { type: ['line', 'bar'] },
+								restore: {},
+								saveAsImage: {}
+							}
+						}
+					};
+
+					// 使用刚指定的配置项和数据显示图表。
+
+					myChart5.setOption(option);
+
+					function SampleExamAj1() {
+						$.ajax({
+							type: "post",
+							async: true, //异步执行
+							url: "Sample exam access year.php",
+							dataType: "json", //返回数据形式为json
+							success: function (result) {
+								console.log(result);
+								var day = [];
+								var count = [];
+								$.each(result, function (i, p) {
+									day[i] = p['day'];
+									count[i] = p['count'];
+								});
+								myChart5.hideLoading();
+								myChart5.setOption({
+									xAxis: {
+										axisLabel: {
+											interval: 'auto',
+											rotate: 0
+										},
+										name: 'Year',
+										data: day
+									},
+
+									series: [{
+										// 根据名字对应到相应的系列
+										name: 'Amount of activities',
+										data: count
+									}]
+								});
+							}
+						});
+					}
+
+					function SampleExamAj2() {
+						$.ajax({
+							type: "post",
+							async: true, //异步执行
+							url: "Sample exam access month.php",
+							dataType: "json", //返回数据形式为json
+							success: function (result) {
+								console.log(result);
+								var day = [];
+								var count = [];
+								$.each(result, function (i, p) {
+									day[i] = p['day'];
+									count[i] = p['count'];
+								});
+								myChart5.hideLoading();
+								myChart5.setOption({
+									xAxis: {
+										axisLabel: {
+											interval: 0,
+											rotate: 40
+										},
+										name: 'Month',
+										data: day
+									},
+
+									series: [{
+										// 根据名字对应到相应的系列
+										name: 'Amount of activities',
+										data: count
+									}]
+								});
+							}
+						});
+					}
+
+
+					function SampleExamAj3() {
+						$.ajax({
+							type: "post",
+							async: true, //异步执行
+							url: "Sample exam access.php",
+							dataType: "json", //返回数据形式为json
+							success: function (result) {
+								console.log(result);
+								var day = [];
+								var count = [];
+								$.each(result, function (i, p) {
+									day[i] = p['day'];
+									count[i] = p['count'];
+								});
+								myChart5.hideLoading();
+								myChart5.setOption({
+									xAxis: {
+										axisLabel: {
+											interval: 'auto',
+											rotate: 0
+										},
+										name: 'Day',
+										data: day
+									},
+
+									series: [{
+										// 根据名字对应到相应的系列
+										name: 'Amount of activities',
+										data: count
+									}]
+								});
+							}
+						});
+					}
+
+					SampleExamAj3();
+
+					//add onchange event for select
+					$(document).ready(function () {
+						$('#SampleExamSelect').change(function () {
+							var rs = $('#SampleExamSelect').val();
+							//alert(typeof rs);
+							switch (rs) {
+								case "1":
+									console.log("case 1");
+									SampleExamAj1();
+									break;
+								case "2":
+									console.log("case 2");
+									SampleExamAj2();
+									break;
+								case "3":
+									console.log("case 2");
+									SampleExamAj3();
+									break;
+
+							}
+
+						})
+					})
+				</script>
+
+
+
+
+
+
+
+
+			</main>
+		</div>
+	</div>
+
+	<!-- Footer  -->
+
+	<script>
+		window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')
+	</script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js" integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+	 crossorigin="anonymous"></script>
+	<script src="../js/bootstrap.min.js"></script>
+	<script src="../js/ie10-viewport-bug-workaround.js"></script>
+</body>
+
+</html>

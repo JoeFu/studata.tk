@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+
+<html lang="zh-cn">
+
+<head>
+    <title>Student data Analysis System Login</title>
+    <meta charset="utf-8">
+    <meta name="keywords" content="Student activity analysis" />
+    <meta name="description" content="Student activity analysis" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <link rel="icon" href="../favicon.ico">
+    <!-- Style -->
+    <link rel="stylesheet" href="bootstrap.css">
+    <link rel="stylesheet" href="login-site.css" id="siteStyle">
+    <link rel="stylesheet" href="login.css">
+    <link rel="stylesheet" href="vendor/animsition/animsition.css">
+    <link rel="stylesheet" href="../css/font-awesome.css">
+    <link href="../demo/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="vendor/bootstrap-select/bootstrap-select.css">
+</head>
+
+<body class="page-login layout-full page-dark">
+    <script src="../js/devicecheck.js"></script>
+    <div class="page height-full">
+        <div class="page-content height-full">
+            <div class="page-brand-info vertical-align animation-slide-left hidden-xs">
+                <div class="page-brand vertical-align-middle">
+                    <div class="brand">
+                        <img class="brand-img" src="../image/brand.png" height="50" alt="Stu_data">
+                    </div>
+                    <h1 class="hidden-sm" style="color:#46be8a">Student Historical data Analysis Platform</h1>
+                    <ul class="list-icons hidden-sm">
+                        <li>
+                            <i class="fa-check" aria-hidden="true"></i> Our team focus on students online click and submit actions and show the students behaviour
+                            by using charts and tables.
+                        </li>
+                        <li>
+                            <i class="fa-check" aria-hidden="true"></i> You can use this platform make further research and deep analysis.
+                        </li>
+                        <li>
+                            <i class="fa-check" aria-hidden="true"></i> It's customized service for your business and research.
+                        </li>
+                    </ul>
+                    <div class="hidden-sm">
+                        <a href="../index.html" class="btn btn-primary margin-right-5">
+                            <i class="icon fa-home"></i> Home</a>
+                        <div class="btn-group margin-right-5">
+                            <button type="button" class="btn btn-success dropdown-toggle" id="app" data-toggle="dropdown" aria-expanded="false">
+                                <i class="icon fa-download"></i> Apps
+                                <span class="caret"></span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-success bullet" aria-labelledby="app" role="menu">
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" data-target="#android_Modal" data-toggle="modal">
+                                        <i class="icon fa-android"></i> Android</a>
+                                </li>
+                                <li role="presentation">
+                                    <a href="#" role="menuitem" data-target="#ios_Modal" data-toggle="modal">
+                                        <i class="icon fa-apple"></i> IOS</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                    <!--Modal -->
+                    <div class="modal fade" id="android_Modal" aria-hidden="true" aria-labelledby="android_Modal" role="dialog" tabindex="-1">
+                        <div class="modal-dialog modal-center">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <h4 class="modal-title">Notification</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p style="color:black">Feature function. Unavailable. </p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-success" class="close" data-dismiss="modal">
+                                        OK
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal fade" id="ios_Modal" aria-hidden="true" aria-labelledby="ios_Modal" role="dialog" tabindex="-1">
+                        <div class="modal-dialog modal-center">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">×</span>
+                                    </button>
+                                    <h4 class="modal-title">Notification</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <p style="color:black">Feature function. Unavailable.</p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-success" data-dismiss="modal">
+                                        OK
+                                    </button>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="page-login-main animation-fade">
+
+                <div class="vertical-align">
+                    <div class="vertical-align-middle">
+                        <div class="brand visible-xs text-center">
+                            <img class="brand-img" src="../favicon.ico" height="50" alt="Studata">
+                        </div>
+                        <h1 class="hidden-xs">Student-data Analysis Platform</h1>
+                        <h3 class="hidden-xs">Login System</h3>
+                        <form class="login-form" action="../login/login.php" method="POST" id="loginForm">
+                            <div class="form-group">
+                                <label class="sr-only" for="username">User Name</label>
+                                <input type="text" class="form-control" id="username" name="username" placeholder="Please Enter User Name">
+                            </div>
+                            <div class="form-group">
+                                <label class="sr-only" for="password">Password</label>
+                                <input type="password" class="form-control" id="password" name="password" placeholder="Please Enter Password">
+                            </div>
+                            <div class="form-group clearfix">
+                                <div class="pull-right">
+                                    <a class="collapsed" data-toggle="collapse" href="#register" aria-expanded="false" aria-controls="register">Register |</a>
+                                    <a class="collapsed" data-toggle="collapse" href="#forgetPassword" aria-expanded="false" aria-controls="forgetPassword">
+                                    Foget?</a>
+                                </div>
+                            </div>
+                            <div class="collapse" id="register" aria-expanded="true">
+                                <div class="alert alert-warning alert-dismissible" role="alert">
+                                    <i class="fa-warning"></i> Sorry, We are not open fot register ! Ask account manager for help!
+                                </div>
+                            </div>
+                            <div class="collapse" id="forgetPassword" aria-expanded="true">
+                                <div class="alert alert-warning alert-dismissible" role="alert">
+                                    <a href="http://studata.tk/about.html" role="menuitem">
+                                        <i class="fa-warning"></i> Please contact account manager !</a>
+                                </div>
+                            </div>
+                            <button type="submit" id="submit" name="submit" class="btn btn-primary btn-block margin-top-30">Login</button>
+                        </form>
+                    </div>
+                </div>
+                <!--Footer-->
+                <footer class="page-copyright">
+                    <p>Student-data Project Team &copy;
+                        <a href="http://studata.tk" target="_blank">Home Page</a>
+                    </p>
+                </footer>
+            </div>
+        </div>
+    </div>
+    <!-- JS -->
+    <script src="vendor/jquery/jquery.js"></script>
+    <script src="vendor/bootstrap/bootstrap.js"></script>
+    <script src="vendor/bootstrap-select/bootstrap-select.min.js"></script>
+    <!-- <script src="vendor/formvalidation/formValidation.min.js" data-name="formValidation"></script>
+    <script src="vendor/formvalidation/framework/bootstrap.min.js" data-deps="formValidation"></script> -->
+    <script src="login.js"></script>
+</body>
+
+</html>

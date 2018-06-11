@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../favicon.ico">
+  <title>Data Query</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <link href="../css/jquery.dataTables.min.css" rel="stylesheet">
+  <link href="../css/buttons.dataTables.min.css" rel="stylesheet"> 
+  <link href="../css/dataquery.css" rel="stylesheet">
+  
+  <!-- Custom styles for this template -->
+  <link href="../css/dashboard1.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/jquery-ui.min.css">
+  <link rel="stylesheet" href="../css/jquery-ui.structure.min.css">
+  <link rel="stylesheet" href="../css/jquery-ui.theme.min.css">
+  <link rel="stylesheet" href="../css/jquery-ui-AutoComplete.css">
+
+  <script type="text/javascript" src="../js/jquery-3.2.1.js"></script>
+  <script type="text/javascript" src="../js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript" src="../js/dataTables.buttons.min.js"></script>
+  <script type="text/javascript" src="../js/buttons.flash.min.js"></script>
+  <script type="text/javascript" src="../js/jszip.min.js"></script>
+  <script type="text/javascript" src="../js/pdfmake.min.js"></script>
+  <script type="text/javascript" src="../js/vfs_fonts.js"></script>
+  <script type="text/javascript" src="../js/buttons.html5.min.js"></script>
+  <script type="text/javascript" src="../js/buttons.print.min.js"></script>
+  
+  <script src="../js/jquery-ui.min.js"></script>
+  <script src="../js/jquery-ui-AutoComplete.js"></script>
+  <!--Baidu Echarts JS control-->
+  <script src="../js/echarts.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+  <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+	  <li class="nav-item active">
+	    <a class="nav-link" href="../demo/index.html">Back</a>
+	  </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link " href="./MoodleCharts.html">Moodle charts<span class="sr-only">(current)</span></a>
+        </li>
+		<li class="nav-item">
+          <a class="nav-link" href="./WebSubmissionCharts.html">WebSubmission charts</a>
+        </li>
+		<li class="nav-item">
+          <a class="nav-link" href="./CriticalQuestions.html">Critical Questions</a>
+        </li>
+		<li class="nav-item">
+          <a class="nav-link active" href="./DataQuery.html">Data Query</a>
+        </li>        
+      </ul>
+    </nav>
+    <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+      <h1>Data Query</h1>
+		<table>
+		  <tr rowspan="2">
+		    <th>Data source</th>
+		    <td>
+			  <select id="DataSourceSelect" name="DataSourceSelect">
+			  </select>		    
+		    </td>
+		    <th>Component</th>
+		    <td>
+			  <select id="ComponentSelect" name="ComponentSelect">
+			  </select>
+		    </td>		    		    		    
+		  </tr>
+		  <tr rowspan="2">
+		    <th>Event Name</th>
+		    <td>
+			  <select id="EventNameSelect" name="EventNameSelect">
+			  </select>		    
+		    </td>
+		    <th>Event Type</th>
+		    <td>
+			  <select id="EventTypeSelect" name="EventTypeSelect">
+			  </select>		    
+		    </td>
+		  </tr>
+		</table>		  
+	    <table id="tableDatePicker">
+	      <tr>
+		    <th>Start Date</th>
+		    <td width="13"></td>
+		    <td>
+			  <input type="text" id="FromStartDatePicker" />
+		    </td>
+		    <td>To</td>
+		    <td>
+			  <input type="text" id="ToStartDatePicker" />
+		    </td>		    
+		  </tr>
+		  <tr>
+		    <th>Due Date</th>
+		    <td width="13"></td>
+		    <td>
+			  <input type="text" id="FromDueDatePicker" />
+		    </td>
+		    <td>To</td>
+		    <td>
+			  <input type="text" id="ToDueDatePicker" />
+		    </td>		    
+		  </tr>		  
+	    </table>	 
+		<table>
+		  <tr>
+		    <th>User</th>
+		    <td width="60"></td>
+		    <td>
+			  <select id="UserSelect" name="UserSelect">
+			  </select>
+		    </td>
+		    <td width="55"></td>
+		    <td>
+			  <table style="margin:auto;border:none; width:100%">
+                <tr>
+				  <th>Grade</th>
+				  <td>
+				    <select id="FromGradeSelect" name="FromGradeSelect">
+					</select>
+				  </td>
+				  <td>To</td>
+				  <td>
+					<select id="ToGradeSelect" name="ToGradeSelect">
+					</select>		    
+				  </td>					   
+                </tr>
+           	</table> 						    
+		    </td>
+		  </tr>		  
+		</table>
+		<table>
+		  <tr>
+		    <th>Assignment</th>
+		    <td>
+			  <select id="AssignmentSelect" name="AssignmentSelect">
+			  </select>
+		    </td>			    
+		    <th>Course</th>
+		    <td width="20"></td>
+		    <td>
+			  <select id="CourseSelect" name="CourseSelect">
+			  </select>
+		    </td>
+		  </tr>		
+		</table>
+		<table>
+		  <tr>
+		    <th>School Year</th>
+		    <td>
+			  <select id="SchoolYearSelect" name="SchoolYearSelect">
+			  </select>
+		    </td>
+		    <td width="65"></td>
+		    <th>Semester</th>			    
+		    <td>
+			  <select id="SemesterSelect" name="SemesterSelect">
+			  </select>
+		    </td>	
+			<td>
+			  <button id="buttonSearch" type="button" class="btn btn-info">Search</button>
+			</td>			    		
+		  </tr>
+		</table>
+		<table id="parentResultDataTable">
+		  <tr>
+			<th>Result:</th>
+		  </tr>
+		  <tr>
+		    <td>
+			  <table id="ResultDataTable" class="display" style="margin:auto;border:none; width:100%"></table>						
+			</td>		
+		  </tr>
+		</table>
+    </main>
+  </div>
+</div>
+
+<script type="text/javascript">
+	var dataSet;
+	var dataSourceTypeId = "1";
+	var selectedComponentId;
+	var selectedEventName;
+	var selectedEventType;
+	var selectedFromStartDate;
+	var selectedToStartDate;
+	var selectedFromDueDate;
+	var selectedToDueDate;
+	var selectedUser;
+	var selectedFromGrade;
+	var selectedToGrade;
+	var selectedAssignment;
+	var selectedCourse;
+	var selectedSchoolYear;
+	var selectedSemester;
+	
+	$(document).ready(function(){
+		$("#parentResultDataTable").hide();
+		showOrHideDatePickers(dataSourceTypeId);
+		addDataSourceTypes();
+		addLowerGrades(0);
+		addHigherGrades(0);
+		initializeData(dataSourceTypeId);
+		
+		$("#buttonSearch").click(function(){
+			$("#parentResultDataTable").show();
+			
+			var selectedComponentId = $("#ComponentSelect option:selected").val();
+			var selectedEventName = $("#EventNameSelect option:selected").text();			
+			var selectedEventType = $("#EventTypeSelect option:selected").val();
+			var selectedFromStartDate = $("#FromStartDatePicker").val();
+			var selectedToStartDate = $("#ToStartDatePicker").val();
+			var selectedFromDueDate = $("#FromDueDatePicker").val();
+			var selectedToDueDate = $("#ToDueDatePicker").val();
+			var selectedUser = $("#UserSelect option:selected").text();
+			var selectedFromGrade = $("#FromGradeSelect option:selected").text();
+			var selectedToGrade = $("#ToGradeSelect option:selected").text();
+			var selectedAssignment = $("#AssignmentSelect option:selected").text();
+			var selectedCourse = $("#CourseSelect option:selected").text();
+			var selectedSchoolYear = $("#SchoolYearSelect option:selected").text();
+			var selectedSemester = $("#SemesterSelect option:selected").text();
+			var sign = "|";
+			var parameters = selectedComponentId + sign + selectedEventName + sign + selectedEventType 
+			  + sign + selectedFromStartDate + sign + selectedToStartDate + sign + selectedFromDueDate
+			  + sign + selectedToDueDate + sign + selectedUser + sign + selectedFromGrade + sign + selectedToGrade
+			  + sign + selectedAssignment + sign + selectedCourse + sign + selectedSchoolYear + sign + selectedSemester
+			  + sign + dataSourceTypeId;
+			
+			$.ajax({ 
+				   type: "get",
+				   dataType: "json",
+				   url: "http://studata.tk/slimapp/public/index.php/api/events/search",
+				   data: { "parameters": parameters },
+				   success: function(result){
+					   loadResult(result);
+				 }
+			});					
+		});
+				
+		// On change of data source
+		$( "#DataSourceSelect" ).change(function() {
+			dataSourceTypeId = this.value;
+			showOrHideDatePickers(dataSourceTypeId);
+			initializeData(dataSourceTypeId);
+		})		
+
+		// On change of Grade
+		$( "#FromGradeSelect" ).change(function() {
+			var currentGrade = this.value;
+			addHigherGrades(currentGrade);
+		});
+		
+		$( "#ToGradeSelect" ).change(function() {
+			var currentGrade = this.value;
+			addLowerGrades(currentGrade);			
+		});
+	});
+
+	function initializeData(dataSourceType){
+		getEventNames(dataSourceType);
+		getEventTypes();
+		getComponents();
+		getUsers();			
+		getCourses();
+		getSchoolYears();
+		getSemesters();
+		getAssignments();
+		initDatePickers();		
+	}
+	
+	// Show or hide date pickers
+	function showOrHideDatePickers(dataSourceType){
+		switch(dataSourceType){
+		case "1": // Moodle Forum
+			$("#tableDatePicker").hide();
+			break;
+		case "2": // WebSubmission
+			$("#tableDatePicker").show();
+			break;
+		default:
+			break;
+		}		  
+
+	}
+	
+	// Get the event names by dataSourceType
+	function getEventNames(dataSourceType){
+		$.ajax({ 
+			   type: "get",
+			   dataType: "json",
+			   url: "http://studata.tk/slimapp/public/index.php/api/eventnames/" + dataSourceType,
+			   success: function(data){			    
+			    $("#EventNameSelect option").remove();
+			    var $select = $('#EventNameSelect');
+			    $select.append(
+				"<option id='SelectEventName'></option>");
+			    $.each(data, function (index, o) {
+			    	var $option = $("<option/>").attr("value", index).text(o.Name);
+		    		$select.append($option);
+			    });
+			   }
+			});
+	}
+
+	// Get all available event types
+	function getEventTypes(){
+		$.ajax({ 
+		   type: "get",
+		   dataType: "json",
+		   url: "http://studata.tk/slimapp/public/index.php/api/eventtypes",
+		   success: function(data){			    
+		    $("#EventTypeSelect option").remove();
+		    var $select = $('#EventTypeSelect');
+			$("#EventTypeSelect").append(
+			"<option id='SelectEventType'></option>");			    
+		    $.each(data, function (index, o) { 
+		    	var $option = $("<option/>").attr("value", o.Id).text(o.Name);
+	    		$select.append($option);	
+		    });			     
+		   }
+		});		
+	}
+	
+	// Get all available components
+	function getComponents(){
+		$.ajax({ 
+		   type: "get",
+		   dataType: "json",
+		   url: "http://studata.tk/slimapp/public/index.php/api/components",
+		   success: function(data){			    
+		    $("#ComponentSelect option").remove();
+		    var $select = $('#ComponentSelect');
+			$("#ComponentSelect").append(
+			"<option id='SelectComponent'></option>");			    
+		    $.each(data, function (index, o) { 
+		    	var $option = $("<option/>").attr("value", o.Id).text(o.Name);
+	    		$select.append($option);	
+		    });
+		   }
+		});
+	}
+	
+	// Get all available users
+	function getUsers(){
+		$.ajax({ 
+		   type: "get",
+		   dataType: "json",
+		   url: "http://studata.tk/slimapp/public/index.php/api/users",
+		   success: function(data){			    
+		    $("#UserSelect option").remove();
+		    var $select = $('#UserSelect');
+			$("#UserSelect").append(
+			"<option id='SelectUser'></option>");			    
+		    $.each(data, function (index, o) { 
+		    	var $option = $("<option/>").attr("value", index).text(o.Id);
+	    		$select.append($option);	
+		    });
+		   }
+		});
+	}	
+	
+	// Get all available courses
+	function getCourses(){
+		$.ajax({ 
+			   type: "get",
+			   dataType: "json",
+			   url: "http://studata.tk/slimapp/public/index.php/api/courses",
+			   success: function(data){			    
+			    $("#CourseSelect option").remove();
+			    var $select = $('#CourseSelect');
+				$("#CourseSelect").append(
+				"<option id='SelectCourse'></option>");			    
+			    $.each(data, function (index, o) { 
+			    	var $option = $("<option/>").attr("value", index).text(o.CourseName);
+		    		$select.append($option);	
+			    });
+			 }
+		});		
+	}
+	
+	// Get all available school years
+	function getSchoolYears(){
+		$.ajax({ 
+			   type: "get",
+			   dataType: "json",
+			   url: "http://studata.tk/slimapp/public/index.php/api/schoolyears",
+			   success: function(data){			    
+			    $("#SchoolYearSelect option").remove();
+			    var $select = $('#SchoolYearSelect');
+				$("#SchoolYearSelect").append(
+				"<option id='SelectSchoolYear'></option>");			    
+			    $.each(data, function (index, o) { 
+			    	var $option = $("<option/>").attr("value", index).text(o.SchoolYear);
+		    		$select.append($option);	
+			    });
+			 }
+		});		
+	}
+	
+	// Get all available semesters
+	function getSemesters(){
+		$.ajax({ 
+			   type: "get",
+			   dataType: "json",
+			   url: "http://studata.tk/slimapp/public/index.php/api/semesters",
+			   success: function(data){			    
+			    $("#SemesterSelect option").remove();
+			    var $select = $('#SemesterSelect');
+			    $select.append(
+				"<option id='SelectSemester'></option>");			    
+			    $.each(data, function (index, o) { 
+			    	var $option = $("<option/>").attr("value", index).text(o.Semester);
+		    		$select.append($option);	
+			    });
+			 }
+		});		
+	}	
+	
+	// Get all available assignments
+	function getAssignments(){
+		$.ajax({ 
+			   type: "get",
+			   dataType: "json",
+			   url: "http://studata.tk/slimapp/public/index.php/api/assignments",
+			   success: function(data){			    
+			    $("#AssignmentSelect option").remove();
+			    var $select = $('#AssignmentSelect');
+			    $select.append(
+				"<option id='SelectAssignment'></option>");			    
+			    $.each(data, function (index, o) { 
+			    	var $option = $("<option/>").attr("value", index).text(o.AssignmentName);
+		    		$select.append($option);	
+			    });
+			 }
+		});				
+		
+	}
+		
+	function addHigherGrades(currentGrade){
+		var selected = $('#ToGradeSelect').val();
+		$('#ToGradeSelect option').remove();
+		
+		$("#ToGradeSelect").append(
+		"<option id='ToGradeSelect'></option>");			
+		var grades = [50, 64, 74, 89];
+		// if the value is zero, add the whole array
+		if (currentGrade == 0){
+			for(var i = 0; i < grades.length; i++){
+				$("#ToGradeSelect").append(
+				"<option id='ToGradeSelect'>" + grades[i] + "</option>");			
+			}
+			return;
+		}
+		
+		// Find the position of currentGrade
+		var pos = -1;
+		for(var i = 0; i < grades.length; i++){
+			if (grades[i] == currentGrade){
+				pos = i;
+				break;
+			}
+		}
+		
+		// Bind values for ToGradeSelect
+		for(var i = pos; i < grades.length; i++){
+			$("#ToGradeSelect").append(
+			"<option id='ToGradeSelect'>" + grades[i] + "</option>");			
+		}			
+		
+		var options = $("#ToGradeSelect option");
+		sortGradeSelect(options, "#ToGradeSelect");
+		$("#ToGradeSelect").val(selected);
+	}
+
+	function sortGradeSelect(options, gradeSelectId){
+		$(gradeSelectId).html($(gradeSelectId + ' option').sort(function(x, y) {
+		    return $(x).text() < $(y).text() ? -1 : 1;
+		}));
+	}
+	
+	function addLowerGrades(currentGrade){
+		var selected = $("#FromGradeSelect").val();
+		$('#FromGradeSelect option').remove();
+		$("#FromGradeSelect").append(
+		"<option id='FromGradeSelect'></option>");	
+		
+		var grades = [50, 64, 74, 89];		
+		// if the value is zero, add the whole array
+		if (currentGrade == 0){
+			for(var i = 0; i < grades.length; i++){
+				$("#FromGradeSelect").append(
+				"<option id='FromGradeSelect'>" + grades[i] + "</option>");			
+			}
+			return;
+		}
+		
+		// Find the position of currentGrade
+		var pos = -1;
+		for(var i = 0; i < grades.length; i++){
+			if (grades[i] == currentGrade){
+				pos = i;
+				break;
+			}
+		}
+		
+		// Bind values for ToGradeSelect
+		for(var i = pos; i >= 0; i--){
+			$("#FromGradeSelect").append(
+			"<option id='FromGradeSelect'>" + grades[i] + "</option>");			
+		}			
+		
+		var options = $("#FromGradeSelect option");
+		sortGradeSelect(options, "#FromGradeSelect");
+		$("#FromGradeSelect").val(selected);
+	}
+		
+	function addDataSourceTypes(){
+	    var $select = $('#DataSourceSelect');
+    	var $option = $("<option/>").attr("value", 1).text("Moodle Forum");
+		$select.append($option);	
+		$option = $("<option/>").attr("value", 2).text("WebSubmission");
+		$select.append($option);		
+	}
+	
+	function initDatePickers(){
+		$("#FromStartDatePicker").datepicker({ dateFormat: "dd/mm/yy" });
+		$("#ToStartDatePicker").datepicker({ dateFormat: "dd/mm/yy" });
+		$("#FromDueDatePicker").datepicker({ dateFormat: "dd/mm/yy" });
+		$("#ToDueDatePicker").datepicker({ dateFormat: "dd/mm/yy" });
+	}
+	
+	function loadResult(data){
+		var dataTable = $('#ResultDataTable').DataTable( {
+			destroy: true,
+	        data: data,
+	        columns: [
+	            { title: "Assignment", data: "AssignmentName" },
+	            { title: "Course", data: "CourseName" },
+	            { title: "Description", data: "Description" },
+	            { title: "Due date", data: "DueDate", visible: false },
+	            { title: "User", data: "FKUserId" },
+	            { title: "Grade", data: "Grade" },
+	            { title: "Name", data: "Name" },
+	            { title: "School Year", data: "SchoolYear" },
+	            { title: "Semester", data: "Semester" },
+	            { title: "Start date", data: "StartDate", visible: false }
+	        ],
+	        dom: 'Bfrtip',
+	        buttons: [
+	            'copy', 'csv', 'excel', 'pdf', 'print'
+	        ]	        
+	    } );			
+		
+		var startDateColumn = table.column( $(this).attr('StartDate') );
+		var dueDateColumn = table.column( $(this).attr('DueDate') );		
+		switch(dataSourceType){
+		case "1":
+			startDateColumn.visible(false);
+			dueDateColumn.visible(false);
+			break;
+		case "2":
+			startDateColumn.visible(true);
+			dueDateColumn.visible(true);			
+			break;
+		default:
+			startDateColumn.visible(false);
+			dueDateColumn.visible(false);			
+			break;
+		}
+	}
+	
+</script>
+<!-- Footer  -->
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>

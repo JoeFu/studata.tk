@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Student activity analysis" content="behaviour">
+    <meta name="author" content="">
+    <title>Student-data DashBoard</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/dashboard.css" rel="stylesheet">
+    <!-- Morris Charts CSS -->
+    <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!--JQuery-->
+    <link rel="stylesheet" href="../../js/jquery-ui.min.css">
+    <link rel="stylesheet" href="../../js/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="../../js/jquery-ui.theme.min.css">
+    <script type="text/javascript" src="../../js/jquery-3.2.1.js"></script>
+    <script src="../../js/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <script src="../../js/devicecheck.js"></script>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top bg-inverse" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="#">Survey</a>
+            </div>
+            <!-- /.navbar-header -->
+
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- <li class="dropdown">
+                        <a class="dropdown-toggle" style="color:white" data-toggle="dropdown" href="#">
+                            <i class="fa fa-envelope fa-fw"></i>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-messages">
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <strong>Name</strong>
+                                        <span class="pull-right text-muted">
+                                            <em>Time</em>
+                                        </span>
+                                    </div>
+                                    <div>Message</div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a class="text-center" href="#">
+                                    <strong>Read All Messages</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul>
+                    </li> -->
+                <!-- /.dropdown -->
+                <!-- <li class="dropdown">
+                        <a class="dropdown-toggle" style="color:white" data-toggle="dropdown" href="#">
+                            <i class="fa fa-tasks fa-fw"></i>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-tasks">
+                           
+                            <li>
+                                <a href="#">
+                                    <div>
+                                        <p>
+                                            <strong>Task Name</strong>
+                                            <span class="pull-right text-muted">80% Complete</span>
+                                        </p>
+                                        <div class="progress progress-striped active">
+                                            <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                                                style="width: 80%">
+                                                <span class="sr-only">80% Complete (danger)</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </a>
+                            </li>
+                            <li class="divider"></li>
+                            <li>
+                                <a class="text-center" href="#">
+                                    <strong>See All Tasks</strong>
+                                    <i class="fa fa-angle-right"></i>
+                                </a>
+                            </li>
+                        </ul> -->
+                <!-- /.dropdown-tasks -->
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" style="color:white" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li>
+                            <a href="#" id='username'>username</a>
+                        </li>
+                        <!-- <li>
+                                    <a href="#">
+                                        <i class="fa fa-gear fa-fw"></i> Settings</a>
+                                </li> -->
+                        <li class="divider"></li>
+                        <li>
+                            <a href="../../login/logout.php">
+                                <i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <form class="input-group custom-search-form" action="../../help.php" method="POST">
+                                <input type="search" name="keyword" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn" input type="search">
+                                    <button class="btn btn-default" input type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </form>
+                        </li>
+                        <li class="active">
+                            <a href="index.html">
+                                <i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Charts
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="../../dashboard/MoodleCharts.html">Moodle Charts</a>
+                                </li>
+                                <li>
+                                    <a href="../../dashboard/WebSubmissionCharts.html">WebSubmission Charts</a>
+                                </li>
+                                <li>
+                                    <a href="Moodlecharts.html"> new Moodle Charts</a>
+                                </li>
+                                <li>
+                                    <a href="WebSubmissionCharts.html"> new WebSubmission Charts</a>
+                                </li>
+                                <!-- <li>
+                                    <a href="Moodlecharts.html">Moodle Charts</a>
+                                </li>
+                                <li>
+                                    <a href="WebSubmissionCharts.html">WebSubmission Charts</a>
+                                </li> -->
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="tables.html">
+                                <i class="fa fa-table fa-fw"></i> Tables</a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Simple Query
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="simplequery.html"> Data Query</a>
+                                </li>
+                                <li>
+                                    <a href="../../dashboard/CriticalQuestions.html"> Critical Questions</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-wrench fa-fw"></i>Setings
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+
+                                <li>
+                                    <a href="https://github.com/JoeFu/mseproject/issues">Bug report</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-files-o fa-fw"></i>Survey
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="survey1.html">Survey 1</a>
+                                </li>
+                                <li>
+                                    <a href="survey2.html">Survey 2</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-lightbulb-o fa-fw"></i>About
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="../../about.html">About us</a>
+                                </li>
+                                <li>
+                                    <a href="../../privacy.html">Privacy</a>
+                                </li>
+                                <li>
+                                    <a href="../../terms.html">Terms</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="help.html">
+                                <i class="fa fa-question fa-fw"></i> Help</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+        <script type="text/javascript">
+            $('#username').load('../backend/APIs.php?option=postName')
+        </script>
+        <!-- Page Content -->
+        <div id="page-wrapper">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Survey 2</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                    <div class="col-lg-6">
+                        <p>
+                            Extend the first survey. This survey will take you about 10-15 minutes, Thank you!
+                        </p>
+                        If you can not seen the survey page below, please click
+                        <b>
+                            <a href="https://www.surveymonkey.com/r/TSPYSLB"> here</a>
+                        </b> to complete the survey, Thank you.
+                        <br></br>
+                    </div>
+                    <script>
+                            (function (t, e, n, o) { var s, c, p; t.SMCX = t.SMCX || [], e.getElementById(o) || (s = e.getElementsByTagName(n), c = s[s.length - 1], p = e.createElement(n), p.type = "text/javascript", p.async = !0, p.id = o, p.src = ["https:" === location.protocol ? "https://" : "http://", "widget.surveymonkey.com/collect/website/js/9ay9D4t8lVv_2B4BNYTI_2FLAbKD_2F1p9uQwPAhzQnYRpPSujDgY2Xp_2BLBkV9j6QaOMpk.js"].join(""), c.parentNode.insertBefore(p, c)) })(window, document, "script", "smcx-sdk");
+                    </script>
+                    <a style="font: 12px Helvetica, sans-serif; color: #999; text-decoration: none;" href="survey2.html">
+                        Thank you for your participation! </a>
+
+                </div>
+                <!-- /.row -->
+
+            </div>
+            <!-- /.container-fluid -->
+            <p class="text-right">
+                <a href="#" title="Back to Top">
+                    <i class="fa fa-arrow-up fa-3x" aria-hidden="true"></i>
+                </a>
+            </p>
+        </div>
+        <!-- /#page-wrapper -->
+        <!--divider-->
+        <hr class="featurette-divider">
+        <!-- End features -->
+        <!-- FOOTER -->
+        <footer>
+            <p class="text-center">&copy; 2017 Student_data Project Team. &brvbar;
+                <a href="../../privacy.html">Privacy</a> &middot;
+                <a href="../../terms.html">Terms</a>
+            </p>
+        </footer>
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../js/studata-newdashboard.js"></script>
+
+</body>
+
+</html>

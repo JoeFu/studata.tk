@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Student activity analysis" content="behaviour">
+    <meta name="author" content="">
+    <title>Student-data Analysis</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="demo/vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- MetisMenu CSS -->
+    <link href="demo/vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="demo/css/dashboard.css" rel="stylesheet">
+    <!-- Morris Charts CSS -->
+    <link href="demo/vendor/morrisjs/morris.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="demo/vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!--JQuery-->
+    <link rel="stylesheet" href="/js/jquery-ui.min.css">
+    <link rel="stylesheet" href="/js/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="/js/jquery-ui.theme.min.css">
+    <script type="text/javascript" src="/js/jquery-3.2.1.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+</head>
+
+<body>
+    <script src="js/devicecheck.js"></script>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top bg-inverse" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">About Us</a>
+            </div>
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-top-links navbar-left">
+                <li class="nav-item active">
+                    <a class="nav-link" href="index.html">Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+            </ul>
+            <!--Side Bar-->
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <form class="input-group custom-search-form" action="help.php" method="POST">
+                                <input type="search" name="keyword" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn" input type="search">
+                                    <button class="btn btn-default" input type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </form>
+                        </li>
+                        <li class="active">
+                            <a href="demo/index.html">
+                                <i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Charts
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="dashboard/MoodleCharts.html">Moodle Charts</a>
+                                </li>
+                                <li>
+                                    <a href="dashboard/WebSubmissionCharts.html">WebSubmission Charts</a>
+                                </li>
+                                <li>
+                                    <a href="demo/pages/Moodlecharts.html"> new Moodle Charts</a>
+                                </li>
+                                <li>
+                                    <a href="demo/pages/WebSubmissionCharts.html"> new WebSubmission Charts</a>
+                                </li>
+                                <!-- <li>
+                                    <a href="demo/pages/Moodlecharts.html">Moodle Charts</a>
+                                </li>
+                                <li>
+                                    <a href="demo/pages/WebSubmissionCharts.html">WebSubmission Charts</a>
+                                </li> -->
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="demo/pages/tables.html">
+                                <i class="fa fa-table fa-fw"></i> Tables</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Simple Query
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="demo/pages/simplequery.html"> Data Query</a>
+                                </li>
+                                <li>
+                                    <a href="../../dashboard/CriticalQuestions.html"> Critical Questions</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-wrench fa-fw"></i>Setings
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="https://github.com/JoeFu/mseproject/issues">Bug report</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-files-o fa-fw"></i>Survey
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="demo/pages/survey1.html">Survey 1</a>
+                                </li>
+                                <li>
+                                    <a href="demo/pages/survey2.html">Survey 2</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-lightbulb-o fa-fw"></i>About
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="../../about.html">About us</a>
+                                </li>
+                                <li>
+                                    <a href="../../privacy.html">Privacy</a>
+                                </li>
+                                <li>
+                                    <a href="../../terms.html">Terms</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="demo/pages/help.html">
+                                <i class="fa fa-question fa-fw"></i> Help</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">About Us</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <nav id="navbar-example" class="navbar navbar-default navbar-static" role="navigation">
+                <div class="container-fluid">
+                    <div class="navbar-header">
+                        <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".bs-js-navbar-scrollspy">
+                            <span class="sr-only">Navigation</span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                            <span class="icon-bar"></span>
+                        </button>
+                        <a class="navbar-brand" style="color:black" href="#">Index</a>
+                    </div>
+                    <div class="collapse navbar-collapse bs-js-navbar-scrollspy">
+                        <ul class="nav navbar-nav">
+                            <li>
+                                <a href="#project">Project Introduction</a>
+                            </li>
+                            <li>
+                                <a href="#team">Team Mates</a>
+                            </li>
+                            <li>
+                                <a href="#work">Related Work</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <div data-spy="scroll" data-target="#navbar-example" data-offset="0" style="height:600px;overflow:auto; position: relative;">
+                <h4 id="project">Project Introduction</h4>
+                <p>
+                    <h4 style="color:blue">
+                        <a href="https://cs.adelaide.edu.au/users/projects/#0298">Project Name: Organised Access to Historical Student Data</a>
+                    </h4>
+                    Supervisors: Nick Falkner, Claudia Szabo, Katrina Falkner
+                    <br></br>
+                    Availability: "COMP SCI 2008 Topics in Computer Science","COMP SCI 3020 Adv Topics in Computer Science","COMP SCI 4015 Honours
+                    Computer Science Research Project","COMP SCI 7096 Master of Software Engineering Project","COMP SCI 7098
+                    Master of Computing &amp; Innovation Project"
+                    <br></br>
+                    Contact:
+                    <a class="e-mail">nickolas.falkner@adelaide.edu.au</a>
+                    <br></br>
+
+                    <b>Project Description</b>
+                    <br></br>
+                    <p>
+                        <b>Introduction</b> The school of Computer Science regularly analyses data collected as part of teaching
+                        to improve teaching practice and to identify better ways to assess and evaluate student work. Over
+                        the years, we have accumulated a large set of data and the problem now is organising it for searching
+                        and trend analysis.
+                        <br></br>
+                        <b>The project</b> You will design and build a database for storing, retrieving and organising at least
+                        two of the school's pedagogical data sources, providing a GUI-front end to allow a member of staff
+                        to query the database, extract data, aggregate it, and export it. You will also be required to write
+                        extraction and insertion scripts that will work with the file-based storage for the current data.
+                        <p class="alert alert-info alert-dismissable">Important: All data will be anonymised and will be identified in a way that allows us to associate
+                            actions without identifying the students.</p>
+                        <b>Requirements</b> You do not need to understand statistics or database queries in detail. This aspect
+                        of the project will be guided by the contacts but you will be expected to read and implement certain
+                        algorithms as part of the project.
+                        <br></br>
+                        <b>Multiple offerings</b> This project may be offered in multiple ways if students of different levels
+                        are interested. Advanced Topics and Honours students should expect to add anonymisation or privacy
+                        preserving aspects to their project. Don't stress, we'll take you through what that means.
+                        <br></br>
+                    </p>
+                </p>
+                <h4 id="team">Team Mates</h4>
+                <p>
+                    <b>Zeyu Lin</b>
+                    <br></br>
+                    Contact:
+                    <a class="e-mail">a1698713@student.adelaide.edu.au</a>
+                    <br></br>
+
+                    <b>Minh Tam Phan</b>
+                    <br></br>
+                    Contact:
+                    <a class="e-mail">a1697735@student.adelaide.edu.au</a>
+                    <br></br>
+                    <b>
+                        <a href="http://fuzeqi.tk">Zeqi Fu</a>
+                    </b>
+                    <br></br>
+                    Contact:
+                    <a class="e-mail">a1680895@student.adelaide.edu.au</a>
+                    <br></br>
+
+                </p>
+                <h4 id="work">Related Work</h4>
+                <p>
+                    There are currently some online learning platforms or discussion forums from other schools and universities which mainly
+                    provide an online-school environment for students to get access to the online resources. Our team has
+                    been primarily focusing on the students' online activities and behaviours. Our online system can both
+                    record and analyze the students' online behaviours, such as viewing, creating, and enrollment. This system
+                    can also help visualize data through visual graphs based on our customers' requirement. The current platform,
+                    which is supported by Restful APIs, can be viewed by many web-browsers in multiple devices. Fundamentally,
+                    the system can support to import data from two data sources in the current stage: the web submission
+                    system (including old and new data systems in file directory structure) and the Moodle forum system.
+                    In addition, the problem that we are trying to solve is how to track students’ daily activities based
+                    on Moodle forum and Web Submission.
+                </p>
+                <p>
+                    <b>Last updated: 11 September 2017</b>
+                </p>
+            </div>
+            <!--divider-->
+            <hr class="featurette-divider">
+            <!-- End features -->
+            <!-- FOOTER -->
+            <footer>
+                <p class="text-center">&copy; 2017 Student_data Project Team. &brvbar;
+                    <a href="../../privacy.html">Privacy</a> &middot;
+                    <a href="../../terms.html">Terms</a>
+
+                </p>
+            </footer>
+            <!-- jQuery -->
+            <script src="demo/vendor/jquery/jquery.min.js"></script>
+
+            <!-- Bootstrap Core JavaScript -->
+            <script src="demo/vendor/bootstrap/js/bootstrap.min.js"></script>
+
+            <!-- Metis Menu Plugin JavaScript -->
+            <script src="demo/vendor/metisMenu/metisMenu.min.js"></script>
+
+            <!-- Morris Charts JavaScript -->
+            <script src="demo/vendor/raphael/raphael.min.js"></script>
+            <script src="demo/vendor/morrisjs/morris.min.js"></script>
+            <!-- Custom Theme JavaScript -->
+            <script src="demo/js/studata-newdashboard.js"></script>
+
+</body>
+
+</html>

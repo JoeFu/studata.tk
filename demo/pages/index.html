@@ -1,0 +1,670 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="Student activity analysis" content="behaviour">
+    <meta name="author" content="">
+    <title>Student-data DashBoard</title>
+    <!--Echarts-->
+    <script src="../js/echarts.js"></script>
+    <!-- Bootstrap Core CSS -->
+    <link href="../vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
+    <!-- MetisMenu CSS JQuery Menu plugin-->
+    <link href="../vendor/metisMenu/metisMenu.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="../css/dashboard.css" rel="stylesheet">
+    <!-- Morris Charts CSS -->
+    <link href="../vendor/morrisjs/morris.css" rel="stylesheet">
+    <!-- Custom Fonts -->
+    <link href="../vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+    <!--JQuery-->
+    <link rel="stylesheet" href="../../js/jquery-ui.min.css">
+    <link rel="stylesheet" href="../../js/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="../../js/jquery-ui.theme.min.css">
+    <script type="text/javascript" src="../../js/jquery-3.2.1.js"></script>
+    <script src="../../js/jquery-ui.min.js"></script>
+    <!-- Chart.js -->
+    <script src="../vendor/ChartJS/Chart.js"></script>
+    <script src="../vendor/ChartJS/Chart.bundle.js"></script>
+    <script src="../vendor/ChartJS/utils.js"></script>
+</head>
+
+<body>
+    <script src="../../js/devicecheck.js"></script>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top bg-inverse" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand">DashBoard</a>
+            </div>
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-top-links navbar-left">
+                <li class="nav-item active">
+                    <a class="nav-link" href="../index.html">Home
+                        <span class="sr-only">(current)</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="../../index.html">Back</a>
+                </li>
+            </ul>
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- <li class="dropdown">
+                    <a class="dropdown-toggle" style="color:white" data-toggle="dropdown" href="#">
+                        <i class="fa fa-envelope fa-fw"></i>
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-messages">
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <strong>Name</strong>
+                                    <span class="pull-right text-muted">
+                                        <em>Time</em>
+                                    </span>
+                                </div>
+                                <div>Message</div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>Read All Messages</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul>
+                </li> -->
+                <!-- /.dropdown -->
+                <!-- <li class="dropdown">
+                    <a class="dropdown-toggle" style="color:white" data-toggle="dropdown" href="#">
+                        <i class="fa fa-tasks fa-fw"></i>
+                        <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-tasks">
+                       
+                        <li>
+                            <a href="#">
+                                <div>
+                                    <p>
+                                        <strong>Task Name</strong>
+                                        <span class="pull-right text-muted">80% Complete</span>
+                                    </p>
+                                    <div class="progress progress-striped active">
+                                        <div class="progress-bar progress-bar-danger" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"
+                                            style="width: 80%">
+                                            <span class="sr-only">80% Complete (danger)</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="divider"></li>
+                        <li>
+                            <a class="text-center" href="#">
+                                <strong>See All Tasks</strong>
+                                <i class="fa fa-angle-right"></i>
+                            </a>
+                        </li>
+                    </ul> -->
+                    <!-- /.dropdown-tasks -->
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <a class="dropdown-toggle" style="color:white" data-toggle="dropdown" href="#">
+                            <i class="fa fa-user fa-fw"></i>
+                            <i class="fa fa-caret-down"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-user">
+                            <li>
+                                <a href="#" id='username'>username</a>
+                            </li>
+                            <!-- <li>
+                                <a href="#">
+                                    <i class="fa fa-gear fa-fw"></i> Settings</a>
+                            </li> -->
+                            <li class="divider"></li>
+                            <li>
+                                <a href="../../login/logout.php">
+                                    <i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                            </li>
+                        </ul>
+                        <!-- /.dropdown-user -->
+                </li>
+                    <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <form class="input-group custom-search-form" action="../../help.php" method="POST">
+                                <input type="search" name="keyword" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn" input type="search">
+                                    <button class="btn btn-default" input type="submit">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </form>
+                        </li>
+                        <li class="active">
+                            <a href="index.html">
+                                <i class="fa fa-dashboard fa-fw"></i> Dashboard</a>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Charts
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                 <li>
+                                    <a href="../../dashboard/MoodleCharts.html">Moodle Charts</a>
+                                </li>
+                                <li>
+                                    <a href="../../dashboard/WebSubmissionCharts.html">WebSubmission Charts</a>
+                                </li>
+                                <li>
+                                    <a href="Moodlecharts.html"> new Moodle Charts</a>
+                                </li>
+                                <li>
+                                    <a href="WebSubmissionCharts.html"> new WebSubmission Charts</a>
+                                </li>
+                                <!-- <li>
+                                    <a href="Moodlecharts.html">Moodle Charts</a>
+                                </li>
+                                <li>
+                                    <a href="WebSubmissionCharts.html">WebSubmission Charts</a>
+                                </li> -->
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="tables.html">
+                                <i class="fa fa-table fa-fw"></i> Tables</a>
+                        </li>
+
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-bar-chart-o fa-fw"></i> Simple Query
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="simplequery.html"> Data Query</a>
+                                </li>
+                                <li>
+                                    <a href="../../dashboard/CriticalQuestions.html"> Critical Questions</a>
+                                </li>
+                            </ul>
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-wrench fa-fw"></i>Setings
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="https://github.com/JoeFu/mseproject/issues">Bug report</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-files-o fa-fw"></i>Survey
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="survey1.html">Survey 1</a>
+                                </li>
+                                <li>
+                                    <a href="survey2.html">Survey 2</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="#">
+                                <i class="fa fa-lightbulb-o fa-fw"></i>About
+                                <span class="fa arrow"></span>
+                            </a>
+                            <ul class="nav nav-second-level">
+                                <li>
+                                    <a href="../../about.html">About us</a>
+                                </li>
+                                <li>
+                                    <a href="../../privacy.html">Privacy</a>
+                                </li>
+                                <li>
+                                    <a href="../../terms.html">Terms</a>
+                                </li>
+                            </ul>
+                            <!-- /.nav-second-level -->
+                        </li>
+                        <li>
+                            <a href="help.html">
+                                <i class="fa fa-question fa-fw"></i> Help</a>
+                        </li>
+                    </ul>
+                </div>
+                <!-- /.sidebar-collapse -->
+            </div>
+            <!-- /.navbar-static-side -->
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Dashboard</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-primary">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-database fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div id="activitynumber" class="huge">Loading</div>
+                                    <div>Activities</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="/demo/pages/tables.html">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-green">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-area-chart fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div class="huge">12</div>
+                                    <div>Charts</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="../pages/Moodlecharts.html">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-yellow">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-graduation-cap fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div id="studentsnumber" class="huge">"Loading"</div>
+                                    <div>Students &amp; Teachers</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="../pages/simplequery.html">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="panel panel-red">
+                        <div class="panel-heading">
+                            <div class="row">
+                                <div class="col-xs-3">
+                                    <i class="fa fa-book fa-5x"></i>
+                                </div>
+                                <div class="col-xs-9 text-right">
+                                    <div id="coursesnumber" class="huge">Loading</div>
+                                    <div>Courses</div>
+                                </div>
+                            </div>
+                        </div>
+                        <a href="../pages/simplequery.html">
+                            <div class="panel-footer">
+                                <span class="pull-left">View Details</span>
+                                <span class="pull-right">
+                                    <i class="fa fa-arrow-circle-right"></i>
+                                </span>
+                                <div class="clearfix"></div>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row">
+
+
+            </div>
+            <!--Dynamic Load Data -->
+            <script src="../js/index.js"></script>
+            <!-- Divider -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <hr class="featurette-divider">
+                </div>
+            </div>
+
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-8">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bar-chart-o fa-fw"></i> Activity Over Year Range
+                            <div class="btn-group pull-right">
+                                <!-- <select id="ChooseYear" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" data-live-search="true" title="Please ChooseYear">
+                                            <option id="PleaseChooseYear"> Choose Year</option>
+                                     </select> -->
+                                <!-- <div class="input-group-btn select">
+                                    
+                                </div> -->
+                                <!-- <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown" id="ChooseYear">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <button class="dropdown-menu slidedown">
+                                    <li id="PleaseChooseYear"></li>
+                                </button> -->
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <!-- <div id="AllactivityChartsByYear" style="width:800px;height:400px;"></div> -->
+                            <canvas id="AllactivityChartsByYearChartJS" width="400" height="200"></canvas>
+
+
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+                    <div class="panel panel-default">
+                    </div>
+                    <!-- /.panel -->
+                    <div class="chat-panel panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-comments fa-fw"></i> Discussion Board
+                            <div class="btn-group pull-right">
+                                <button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">
+                                    <i class="fa fa-chevron-down"></i>
+                                </button>
+                                <ul class="dropdown-menu slidedown">
+                                    <li>
+                                        <a href="index.html">
+                                            <i class="fa fa-refresh fa-fw"></i> Refresh </a>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <ul class="chat">
+                                <!-- DISQUS discuss model-->
+                                <div id="disqus_thread"></div>
+                                <script>
+                                    var disqus_config = function () {
+                                        this.page.url = 'http://studata.tk/demo/index.html';
+                                        this.page.identifier = '<?php echo dsq_identifier_for_post($post); ?>';
+                                    };
+
+                                    (function () {
+                                        var d = document, s = d.createElement('script');
+                                        s.src = 'https://studata.disqus.com/embed.js';
+                                        s.setAttribute('data-timestamp', +new Date());
+                                        (d.head || d.body).appendChild(s);
+                                    })();
+                                </script>
+                                <noscript>Please enable JavaScript to view the
+                                    <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a>
+                                </noscript>
+                            </ul>
+                        </div>
+                        <!-- /.panel-body -->
+                        <div class="panel-footer">
+                            <div class="input-group">
+                                Please discuss here
+                            </div>
+                        </div>
+                        <!-- /.panel-footer -->
+                    </div>
+                    <!-- /.panel .chat-panel -->
+
+                </div>
+                <!-- /.col-lg-8 -->
+                <div class="col-lg-4">
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-bell fa-fw"></i> Quick Link
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="list-group">
+                                <a href="index.html" class="list-group-item">
+                                    <i class="fa fa-dashboard fa-fw"></i>Dash Board
+                                    <span class="pull-right text-muted small">
+                                        <em>Available</em>
+                                    </span>
+                                </a>
+                                <a href="Moodlecharts.html" class="list-group-item">
+                                    <i class="fa fa-bar-chart-o fa-fw"></i> Moodle Charts
+                                    <span class="pull-right text-muted small">
+                                        <em>Available</em>
+                                    </span>
+                                </a>
+                                <a href="WebSubmissionCharts.html" class="list-group-item">
+                                    <i class="fa fa-bar-chart-o fa-fw"></i> Web Submission Charts
+                                    <span class="pull-right text-muted small">
+                                        <em>Available</em>
+                                    </span>
+                                </a>
+                                <a href="../../dashboard/CriticalQuestions.html" class="list-group-item">
+                                    <i class="fa fa-tasks fa-fw"></i> Cross Data
+                                    <span class="pull-right text-muted small">
+                                        <em>Available</em>
+                                    </span>
+                                </a>
+                                <a href="simplequery.html" class="list-group-item">
+                                    <i class="fa fa-upload fa-fw"></i> Simple Query
+                                    <span class="pull-right text-muted small">
+                                        <em>Available</em>
+                                    </span>
+                                </a>
+                                <a href="simplequery.html" class="list-group-item">
+                                    <i class="fa fa-bolt fa-fw"></i> Report System
+                                    <span class="pull-right text-muted small">
+                                        <em>Available</em>
+                                    </span>
+                                </a>
+                                <a href="#" class="list-group-item">
+                                    <i class="fa fa-warning fa-fw"></i> Deep Analysis
+                                    <span class="pull-right text-muted small">
+                                        <em>Future Feature</em>
+                                    </span>
+                                </a>
+
+                                <a href="https://github.com/JoeFu/mseproject/issues" class="list-group-item">
+                                    <i class="fa fa-bug fa-fw"></i> Bug report
+                                    <span class="pull-right text-muted small">
+                                        <em>Available</em>
+                                    </span>
+                                </a>
+
+                                <a href="../../login/logout.php" class="list-group-item">
+                                    <i class="fa fa-sign-out fa-fw"></i> Logout
+                                    <span class="pull-right text-muted small">
+                                        <em>Available</em>
+                                    </span>
+                                </a>
+                            </div>
+                            <!-- /.list-group -->
+                            <button class="btn btn-default btn-block" data-toggle="modal" data-target="#myModal">Service Status</button>
+                            <!--(Modal) -->
+                            <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">
+                                                &times;
+                                            </button>
+                                            <h4 class="modal-title" id="myModalLabel">
+                                                Our developing process:
+                                            </h4>
+                                        </div>
+                                        <div class="modal-body">
+                                            <li>Dash Board: Available</li>
+                                            <li>Moodle Charts: Available</li>
+                                            <li>Web Submission Charts: Available</li>
+                                            <li>Cross Data: Available</li>
+                                            <li>Data Query: Available</li>
+                                            <li>Report system: Available</li>
+                                            <li>Login: Available</li>
+                                            <li>Bug report: Available</li>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-default" data-dismiss="modal"> Close
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <!-- /.modal-content -->
+                                </div>
+                                <!-- /.modal -->
+                            </div>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+
+                    <!-- /.panel -->
+                    <div class="panel panel-default">
+                        <div class="panel-heading">
+                            <i class="fa fa-clock-o fa-fw"></i> Development Timeline
+                        </div>
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <ul class="time-line">
+                                <li>
+                                    <time datatime="2017-10-10">2017-10-10</time>
+                                    <h5>
+                                        new index Page
+                                    </h5>
+                                </li>
+                                <li>
+                                    <time datatime="2017-8-15">2017-8-15</time>
+                                    <h5>
+                                        new Dashboard,about page, privacy page, and terms page
+                                    </h5>
+                                </li>
+                                <li>
+                                    <time datatime="2017-3-15">2017-3-15</time>
+                                    <h5>
+                                        Websubmission Charts
+                                    </h5>
+                                </li>
+                                <li>
+                                    <time datatime="2017-2-15">2017-2-15</time>
+                                    <h5>
+                                        Moodle Charts
+                                    </h5>
+                                </li>
+                                <li>
+                                    <time datatime="2016-11-15">2016-11-15</time>
+                                    <h5>
+                                        We add Login Function for the website
+                                    </h5>
+                                </li>
+                                <li>
+                                    <time datatime="2016-10-12">2016-10-12</time>
+                                    <h5>
+                                        We got several charts to show the Students' behaviour
+                                    </h5>
+                                </li>
+                                <li>
+                                    <time datatime="2016-09-12">2016-09-12</time>
+                                    <h5>
+                                        We generate the first page of index dashboard.
+                                    </h5>
+                                </li>
+                            </ul>
+                        </div>
+                        <!-- /.panel-body -->
+                    </div>
+                    <!-- /.panel -->
+
+                </div>
+                <!-- /.col-lg-4 -->
+            </div>
+            <!-- /.row -->
+            <p class="text-right">
+                <a href="#" title="Back to Top">
+                    <i class="fa fa-arrow-up fa-3x" aria-hidden="true"></i>
+                </a>
+            </p>
+        </div>
+        <!-- /#page-wrapper -->
+        <!--divider-->
+        <hr class="featurette-divider">
+        <!-- End features -->
+        <!-- FOOTER -->
+        <footer>
+            <p class="text-center">&copy; 2017 Student_data Project Team. &brvbar;
+                <a href="../../privacy.html">Privacy</a> &middot;
+                <a href="../../terms.html">Terms</a>
+
+            </p>
+        </footer>
+    </div>
+    <!-- /#wrapper -->
+
+
+    <!-- jQuery -->
+    <script src="../vendor/jquery/jquery.min.js"></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../vendor/bootstrap/js/bootstrap.min.js"></script>
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../vendor/metisMenu/metisMenu.min.js"></script>
+    <!-- Morris Charts JavaScript -->
+    <script src="../vendor/raphael/raphael.min.js"></script>
+    <script src="../vendor/morrisjs/morris.min.js"></script>
+    <!-- Custom Theme JavaScript -->
+    <script src="../js/studata-newdashboard.js"></script>
+    <script id="dsq-count-scr" src="//studata.disqus.com/count.js" async></script>
+    <!-- <a class="dash-feedback" href="#">
+        <span class="fa fa-commenting"></span>&nbsp; Feedback</a> -->
+</body>
+
+</html>

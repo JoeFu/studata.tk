@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../favicon.ico">
+  <title>Dashboard</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="../css/dashboard1.css" rel="stylesheet">
+  <link rel="stylesheet" href="../css/jquery-ui.min.css">
+  <link rel="stylesheet" href="../css/jquery-ui.structure.min.css">
+  <link rel="stylesheet" href="../css/jquery-ui.theme.min.css">
+
+  <script type="text/javascript" src="../js/jquery-3.2.1.js"></script>
+  <script src="../js/jquery-ui.min.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+  <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse" data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false" aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+      <li class="nav-item active">
+        <a class="nav-link" href="../demo/index.html">Back</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link" href="./MoodleCharts.html">Moodle charts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="./WebSubmissionCharts.html">WebSubmission charts</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link active" href="./CriticalQuestions.html">Critical Questions<span class="sr-only">(current)</span></a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link" href="./DataQuery.html">Data query</a>
+        </li>		
+      </ul>
+    </nav>
+    <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+      <h1>Dashboard</h1>
+      <select id="SelectCourse">
+        <option  id="PleaseSelectCourse">Select course</option>
+      </select>
+      <select id="SelectYear">
+        <option  id="PleaseSelectYear">SelectYear</option>
+      </select>
+      <select id="SelectSemester">
+        <option  id="PleaseSelectSemester">SelectSemester</option>
+      </select>
+      </br></br>
+      <button id="Hide">Show/Hide Semester and Assignments start/end day</button>
+      <div id="SemesterAndAssignmentInformation" style="display:none">
+        <div id="SemesterInformation">
+          </br>
+          <label>Semester start day/end day (YYYYMMDD):</label>
+          <label id="SemesterStartDay"></label>/
+          <label id="SemesterEndDay"></label>
+          </br>
+        </div>
+        <div id="AssignmentInformation">
+        </div>
+      </div>
+      </br></br>
+      <h3>Critical question 1: 
+        </br> 
+        Is there a correlation between X and Y for students?
+      </h3>
+      </br>
+      <div>
+        X:&nbsp&nbsp 
+        <select id="QuestionOneSelectAssignment">
+          <option  id="PleaseSelectAssignment">SelectAssignment</option>
+        </select>
+        &nbsp&nbsp Mark 
+        </br></br>
+        Y:&nbsp&nbsp Total amount of &nbsp
+        <input name="QuestionOneEventNameOrEventContext" type="radio" value="1"/>
+        <select id="QuestionOneSelectEventName">
+          <option  id="PleaseSelectEventName">Select Event Name</option>
+        </select>
+        &nbsp or&nbsp
+        <input name="QuestionOneEventNameOrEventContext" type="radio" value="2"/>
+        <select id="QuestionOneSelectEventContext">
+          <option  id="PleaseSelectEventContext">Select Event Context</option>
+        </select>
+        </br></br>
+        &nbsp&nbsp&nbsp&nbsp&nbsp in period
+        <label>from (YYYYMMDD)</label>&nbsp
+        <input type="text" id="QuestionOneFrom">&nbsp
+        <label>to (YYYYMMDD)</label>&nbsp
+        <input type="text" id="QuestionOneTo">
+      </div>
+      </br>
+      <button type="button" id="QuestionOneFilter">Update</button>&nbsp
+      <button type="button" id="QuestionOneGetAnswer">Get answer</button>
+      </br></br>
+      <div id="R">
+      </div>
+      <div>
+        <table border="1" id="QuestionOneTable">
+          <tr>
+            <th>User</th>
+            <th>Amount of events</th>
+            <th>Mark</th>
+          </tr>
+        </table>
+      </div>
+      </br>
+	  
+<script type="text/javascript">
+$(document).ready(function() {
+	$("#Hide").click(function(){
+		$("#SemesterAndAssignmentInformation").toggle();
+	});
+
+	//Load data for select course
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=loadCourse",
+		dataType: "json", 
+		success: function(result) {
+			var CourseName = [];
+			$.each(result,function(i,p){
+				CourseName[i]=p['CourseName'];
+				$("#SelectCourse").append(
+					" <option id='" + CourseName[i] + "'>"+ CourseName[i] + "</option>");
+			});
+		}
+	});
+
+	//When users select course, load options for "select year"
+	$("#SelectCourse").change(function() {
+		// When users select course, remove all options in year and semester
+		$("#SelectYear option").remove();
+		$("#SelectSemester option").remove();
+		$("#SelectAssignment option").remove();
+		$("#SelectYear").append(
+			" <option id='PleaseSelectYear'>SelectYear</option>");
+		$("#SelectSemester").append(
+			" <option id='PleaseSelectSemester'>SelectSemester</option>");
+		$("#SelectAssignment").append(
+			" <option id='PleaseSelectAssignment'>SelectAssignment</option>");
+		 //Get the course user chooses
+		var SelectCourseId=$("#SelectCourse option:selected").attr("id");
+		$.ajax({
+			type: "get",
+			async: true, 
+			url: "controller.php?type=loadYear",
+			dataType: "json", 
+			data: {"SelectCourseId":SelectCourseId},
+			success: function(result) {
+				var SchoolYear = [];
+				$.each(result,function(i,p){
+					SchoolYear[i]=p['SchoolYear'];
+					$("#SelectYear").append(
+						" <option id='" + SchoolYear[i] + "'>"
+						+ SchoolYear[i] + "</option>");
+				});
+			}
+		});//ajax
+	});//change()
+
+	//When users select course and year, load options for "select semester"
+	$("#SelectYear").change(function() {
+		// When users select course and year, remove all options in semester
+		$("#SelectSemester option").remove();
+		$("#SelectAssignment option").remove();
+		$("#SelectSemester").append(
+			" <option id='PleaseSelectSemester'>SelectSemester</option>");
+		$("#SelectAssignment").append(
+			" <option id='PleaseSelectSemester'>SelectAssignment</option>");
+		//Get the course and year user chooses
+		var SelectCourseId=$("#SelectCourse option:selected").attr("id");
+		var SelectYearId=$("#SelectYear option:selected").attr("id");
+		$.ajax({
+			type: "get",
+			async: true, 
+			url: "controller.php?type=loadSemester",
+			dataType: "json", 
+			data: {"SelectCourseId":SelectCourseId,"SelectYearId":SelectYearId},
+			success: function(result) {
+				var Semester = [];
+				$.each(result,function(i,p){
+					Semester[i]=p['Semester'];
+					$("#SelectSemester").append(
+						" <option id='" + Semester[i] + "'>"
+						+ Semester[i] + "</option>");
+				});
+			}
+		});//ajax
+	});//change()
+
+	//When users select course, year, semester load options for "select assignment"
+	$("#SelectSemester").change(function() {
+		// When users select course and year, remove all options in semester
+		$("#QuestionOneSelectAssignment option").remove();
+		$("#QuestionOneSelectAssignment").append(
+			" <option id='PleaseSelectSemester'>SelectAssignment</option>");
+		 //Get the course and year user chooses
+		var SelectCourseId=$("#SelectCourse option:selected").attr("id");
+		var SelectYearId=$("#SelectYear option:selected").attr("id");
+		var SelectSemesterId=$("#SelectSemester option:selected").attr("id");				
+		$.ajax({
+			type: "get",
+			async: true, 
+			url: "controller.php?type=loadAssignment",
+			dataType: "json", 
+			data: {"SelectCourseId":SelectCourseId,"SelectYearId":SelectYearId,"SelectSemesterId":SelectSemesterId},
+			success: function(result) {
+				var AssignmentName = [];
+				$.each(result,function(i,p){
+					AssignmentName[i]=p['AssignmentName'];
+					$("#QuestionOneSelectAssignment").append(
+						" <option id='" + AssignmentName[i] + "'>"
+						+ AssignmentName[i] + "</option>");
+				});
+			}
+		});//ajax
+	});//change()
+
+	//after user selects semester, update the start day and end day (the value in the input box)
+	$('#SelectSemester').change(function () {
+		var SelectCourseId = $("#SelectCourse option:selected").attr("id");
+		var SelectYearId = $("#SelectYear option:selected").attr("id");
+		var SelectSemesterId = $("#SelectSemester option:selected").attr("id");
+		var PeriodFrom;
+		var PeriodTo;
+		switch (SelectYearId) {
+			//the start day and end day of semesters in different years are different
+			case "2004":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0301";
+					PeriodTo = SelectYearId + "0630";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0726";
+					PeriodTo = SelectYearId + "1120";
+				}
+				break;
+			case "2005":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0228";
+					PeriodTo = SelectYearId + "0702";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0725";
+					PeriodTo = SelectYearId + "1119";
+				}
+				break;
+			case "2006":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0227";
+					PeriodTo = SelectYearId + "0701";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0724";
+					PeriodTo = SelectYearId + "1118";
+				}
+				break;
+			case "2007":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0226";
+					PeriodTo = SelectYearId + "0630";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0723";
+					PeriodTo = SelectYearId + "1117";
+				}
+				break;
+			case "2008":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0303";
+					PeriodTo = SelectYearId + "0705";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0728";
+					PeriodTo = SelectYearId + "1122";
+				}
+				break;
+			case "2009":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0302";
+					PeriodTo = SelectYearId + "0704";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0727";
+					PeriodTo = SelectYearId + "1121";
+				}
+				break;
+			case "2010":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0301";
+					PeriodTo = SelectYearId + "0703";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0726";
+					PeriodTo = SelectYearId + "1120";
+				}
+				break;
+			case "2011":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0228";
+					PeriodTo = SelectYearId + "0702";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0725";
+					PeriodTo = SelectYearId + "1129";
+				}
+				break;
+			case "2012":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0227";
+					PeriodTo = SelectYearId + "0630";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0723";
+					PeriodTo = SelectYearId + "1117";
+				}
+				break;
+			case "2013":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0304";
+					PeriodTo = SelectYearId + "0705";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0729";
+					PeriodTo = SelectYearId + "1122";
+				}
+				break;
+			case "2014":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0303";
+					PeriodTo = SelectYearId + "0704";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0728";
+					PeriodTo = SelectYearId + "1121";
+				}
+				break;
+			case "2015":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0302";
+					PeriodTo = SelectYearId + "0703";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0727";
+					PeriodTo = SelectYearId + "1120";
+				}
+				break;
+			case "2016":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0229";
+					PeriodTo = SelectYearId + "0702";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0725";
+					PeriodTo = SelectYearId + "1119";
+				}
+				break;
+			case "2017":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0227";
+					PeriodTo = SelectYearId + "0701";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0724";
+					PeriodTo = SelectYearId + "1118";
+				}
+				break;
+			case "2018":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0226";
+					PeriodTo = SelectYearId + "0630";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0723";
+					PeriodTo = SelectYearId + "1117";
+				}
+				break;
+			case "2019":
+				if (SelectSemesterId=="Semester 1") {
+					PeriodFrom = SelectYearId + "0304";
+					PeriodTo = SelectYearId + "0706";
+				} else if (SelectSemesterId=="Semester 2") {
+					PeriodFrom = SelectYearId + "0729";
+					PeriodTo = SelectYearId + "1123";
+				}
+				break;
+		}
+		$("#QuestionOneFrom").val(PeriodFrom);
+		$("#QuestionOneTo").val(PeriodTo);
+			
+		// display semester start day, end day
+		$("#SemesterStartDay").html(PeriodFrom); 
+        $("#SemesterEndDay").html(PeriodTo);
+		displayAssignmentInformation();
+	})//$('#SelectSemester').change()
+
+	//after user selects assignment, update the start day and end day (the value in the input box)
+	$('#QuestionOneSelectAssignment').change(function () {
+		getAssignmentStartDueDayAndUpdate();
+	})//$('#SelectAssignment').change()
+
+	//DatePicker for Question One
+	$("#QuestionOneFrom").datepicker({
+		defaultDate: "+1w",
+		changeMonth: true,
+		changeYear: true,
+		numberOfMonths: 3,
+		onClose: function (selectedDate) {
+			$("#QuestionOneTo").datepicker("option", "minDate", selectedDate);
+		}
+	});
+	$("#QuestionOneTo").datepicker({
+		defaultDate: "+1w",
+		changeMonth: true,
+		changeYear: true,
+		numberOfMonths: 3,
+		onClose: function (selectedDate) {
+			$("#QuestionOneFrom").datepicker("option", "maxDate", selectedDate);
+		}
+	});
+
+	//set the format (YYYYMMDD) of start date and end date for Question One
+	$("#QuestionOneFrom").datepicker("option", "dateFormat", "yymmdd");//YYYYMMDD
+	$("#QuestionOneTo").datepicker("option", "dateFormat", "yymmdd");//YYYYMMDD
+
+	//filter event name and event context for question one
+	$('#QuestionOneFilter').click(function () {
+		var SelectCourse=$("#SelectCourse option:selected").attr("id");
+		var from = $("#QuestionOneFrom").val();
+		var to = $("#QuestionOneTo").val();
+
+		//filter event name
+		$.ajax({
+			type: "get",
+			async: true, 
+			url: "controller.php?type=loadEventNameBasedOnCourseAndPeriod",
+			dataType: "json", 
+			data: {"SelectCourse":SelectCourse,"from": from, "to": to},
+			success: function(result) {
+				$("#QuestionOneSelectEventName option").remove();
+				$("#QuestionOneSelectEventName").append(
+					" <option id='PleaseSelectEventName'>Select Event Name</option>");
+				$.each(result,function(i,p){
+					$("#QuestionOneSelectEventName").append(
+						" <option id='" + p['Name'] + "'>"
+						+ p['Name'] + "</option>");
+				});
+			}
+		});//ajax
+
+		//filter event context
+		$.ajax({
+			type: "get",
+			async: true, 
+			url: "controller.php?type=loadEventContextBasedOnCourseAndPeriod",
+			dataType: "json", 
+			data: {"SelectCourse":SelectCourse,"from": from, "to": to},
+			success: function(result) {
+				$("#QuestionOneSelectEventContext option").remove();
+				$("#QuestionOneSelectEventContext").append(
+					" <option id='PleaseSelectEventContext'>Select Event Context</option>");
+				$.each(result,function(i,p){
+					$("#QuestionOneSelectEventContext").append(
+						" <option id='" + p['Name'] + "'>"
+						+ p['Name'] + "</option>");
+				});
+			}
+		});//ajax
+	})//$('#QuestionOneFilter').click
+
+	//calculate and print Pearson Correlation Coefficient and data in table
+	$('#QuestionOneGetAnswer').click(function () {
+		var SelectCourse=$("#SelectCourse option:selected").attr("id");
+		var SelectYear=$("#SelectYear option:selected").attr("id");
+		var SelectSemester=$("#SelectSemester option:selected").attr("id");
+		var SelectAssignment=$("#QuestionOneSelectAssignment option:selected").attr("id");
+		var from = $("#QuestionOneFrom").val();
+		var to = $("#QuestionOneTo").val();
+		var event;
+
+		var QuestionOneRadioValue=$("input[name='QuestionOneEventNameOrEventContext']:checked").val();
+		if (QuestionOneRadioValue==1) {//user chooses event name
+			url="controller.php?type=criticalQuestionOneEventName";
+			event=$("#QuestionOneSelectEventName option:selected").attr("id");
+		} else if ((QuestionOneRadioValue==2)) {//user chooses event context
+			url="controller.php?type=criticalQuestionOneEventContext";
+			event=$("#QuestionOneSelectEventContext option:selected").attr("id");
+		}
+
+		$.ajax({
+			type: "get",
+			async: true, 
+			url: url,
+			dataType: "json", 
+			data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment,"from": from, "to": to,"event":event},
+			success: function(result) {
+				$("#QuestionOneTable tr").nextAll().remove();// remove all rows (except header) of the table
+				var R;// Pearson Correlation Coefficient
+				$.each(result,function(i,p){
+					R=p['R'];
+					//add row and print data (User, Amount of events, Mark) in table
+					var tbBody = "<tr><td>" + p['FKParentId'] + "</td>" + "<td>" + p['Amount'] + "</td>" + "<td>" + p['TopGrade'] + "</td></tr>";
+					$("#QuestionOneTable").append(tbBody);
+				});//$.each
+				$('#R').html("Pearson Correlation Coefficient="+R+"</br></br>");// print Pearson Correlation Coefficient
+			}
+		});//ajax
+	})
+})//DocumentReady()
+
+//display assignment name, the start day and due day of all assignments (given the course, year, semester)
+function displayAssignmentInformation() {
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+
+	$.ajax({
+		type: "get",
+		async: true, //asynchronous
+		url: "controller.php?type=getAssignmentInformation",
+		dataType: "json", //return JSON data
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester},
+		success: function (result) {
+			$("#AssignmentInformation").empty();
+			$.each(result, function (i, p) {
+				$("#AssignmentInformation").append("<p>"+p['AssignmentName']+" start day/due day (YYYYMMDD): "+p['StartDate']+"/ "+p['DueDate']+"</p>"); 
+			});
+		}//success
+	});//ajax
+}//function displayAssignmentInformation()
+
+//update the start day and end day (the value in the input box)
+function getAssignmentStartDueDayAndUpdate() {
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#QuestionOneSelectAssignment option:selected").attr("id");
+
+	$.ajax({
+		type: "get",
+		async: true, //asynchronous
+		url: "controller.php?type=getAssignmentStartAndDueDay",
+		dataType: "json", //return JSON data
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment},
+		success: function (result) {
+			$.each(result, function (i, p) {
+				$("#QuestionOneFrom").val(p['StartDate']);
+				$("#QuestionOneTo").val(p['DueDate']);
+			});
+		}//success
+	});//ajax
+}//function getAssignmentStartDueDayAndUpdate()
+</script>
+    </main>
+  </div>
+</div>
+</body>
+</html>

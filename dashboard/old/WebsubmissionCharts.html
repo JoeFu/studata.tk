@@ -1,0 +1,1385 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <link rel="icon" href="../favicon.ico">
+  <title>Dashboard</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="../css/bootstrap.min.css" rel="stylesheet">
+  <!-- Custom styles for this template -->
+  <link href="../css/dashboard1.css" rel="stylesheet">
+  <link rel="stylesheet" href="../js/jquery-ui.min.css">
+  <link rel="stylesheet" href="../js/jquery-ui.structure.min.css">
+  <link rel="stylesheet" href="../js/jquery-ui.theme.min.css">
+  <link rel="stylesheet" href="../js/jquery-ui-AutoComplete.css">
+
+  <script type="text/javascript" src="../js/jquery-3.2.1.js"></script>
+  <script src="../js/jquery-ui.min.js"></script>
+  <script src="../js/jquery-ui-AutoComplete.js"></script>
+  <!--Baidu Echarts JS control-->
+  <script src="../js/echarts.js"></script>
+</head>
+<body>
+<nav class="navbar navbar-toggleable-md navbar-inverse fixed-top bg-inverse">
+  <button class="navbar-toggler navbar-toggler-right hidden-lg-up" type="button" data-toggle="collapse"
+            data-target="#navbarsExampleDefault" aria-controls="navbarsExampleDefault" aria-expanded="false"
+            aria-label="Toggle navigation">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+  <a class="navbar-brand" href="#">Dashboard</a>
+  <div class="collapse navbar-collapse" id="navbarsExampleDefault">
+    <ul class="navbar-nav mr-auto">
+	  <li class="nav-item active">
+	    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+	  </li>
+	  <li class="nav-item">
+	    <a class="nav-link" href="../index.html">Back</a>
+	  </li>
+    </ul>
+    <form class="form-inline mt-2 mt-md-0">
+      <input class="form-control mr-sm-2" type="text" placeholder="Search">
+      <button class="btn btn-info" type="submit">Search</button>
+    </form>
+  </div>
+</nav>
+
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-sm-3 col-md-2 hidden-xs-down bg-faded sidebar">
+      <ul class="nav nav-pills flex-column">
+        <li class="nav-item">
+          <a class="nav-link " href="./index.html">Moodle charts<span class="sr-only">(current)</span></a>
+        </li>
+		<li class="nav-item">
+          <a class="nav-link active" href="WebSubmissionCharts.html">WebSubmission charts</a>
+        </li>
+      </ul>
+    </nav>
+    <main class="col-sm-9 offset-sm-3 col-md-10 offset-md-2 pt-3">
+      <h1>Dashboard</h1>
+	  <select id="SelectCourse">
+	    <option  id="PleaseSelectCourse">Select course</option>
+      </select>
+	  <select id="SelectYear">
+	    <option  id="PleaseSelectYear">SelectYear</option>
+	  </select>
+	  <select id="SelectSemester">
+	    <option  id="PleaseSelectSemester">SelectSemester</option>
+	  </select>
+	  <select id="SelectAssignment">
+		<option  id="PleaseSelectAssignment">SelectAssignment</option>
+	  </select>
+
+<script type="text/javascript">
+$(document).ready(function() {
+	//Load data for select course
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=loadCourse",
+		dataType: "json", 
+		success: function(result) {
+			var CourseName = [];
+			$.each(result,function(i,p){
+				CourseName[i]=p['CourseName'];
+				$("#SelectCourse").append(
+					" <option id='" + CourseName[i] + "'>"+ CourseName[i] + "</option>");
+			});
+		}
+	});
+
+	//When users select course, load options for "select year"
+	$("#SelectCourse").change(function() {
+		// When users select course, remove all options in year and semester
+		$("#SelectYear option").remove();
+		$("#SelectSemester option").remove();
+		$("#SelectAssignment option").remove();
+		$("#SelectYear").append(
+			" <option id='PleaseSelectYear'>SelectYear</option>");
+		$("#SelectSemester").append(
+			" <option id='PleaseSelectSemester'>SelectSemester</option>");
+		$("#SelectAssignment").append(
+			" <option id='PleaseSelectAssignment'>SelectAssignment</option>");
+		 //Get the course user chooses
+		var SelectCourseId=$("#SelectCourse option:selected").attr("id");
+		$.ajax({
+			type: "get",
+			async: true, 
+			url: "controller.php?type=loadYear",
+			dataType: "json", 
+			data: {"SelectCourseId":SelectCourseId},
+			success: function(result) {
+				var SchoolYear = [];
+				$.each(result,function(i,p){
+					SchoolYear[i]=p['SchoolYear'];
+					$("#SelectYear").append(
+						" <option id='" + SchoolYear[i] + "'>"
+						+ SchoolYear[i] + "</option>");
+				});
+			}
+		});//ajax
+	});//change()
+
+	//When users select course and year, load options for "select semester"
+	$("#SelectYear").change(function() {
+		// When users select course and year, remove all options in semester
+		$("#SelectSemester option").remove();
+		$("#SelectAssignment option").remove();
+		$("#SelectSemester").append(
+			" <option id='PleaseSelectSemester'>SelectSemester</option>");
+		$("#SelectAssignment").append(
+			" <option id='PleaseSelectSemester'>SelectAssignment</option>");
+		//Get the course and year user chooses
+		var SelectCourseId=$("#SelectCourse option:selected").attr("id");
+		var SelectYearId=$("#SelectYear option:selected").attr("id");
+		$.ajax({
+			type: "get",
+			async: true, 
+			url: "controller.php?type=loadSemester",
+			dataType: "json", 
+			data: {"SelectCourseId":SelectCourseId,"SelectYearId":SelectYearId},
+			success: function(result) {
+				var Semester = [];
+				$.each(result,function(i,p){
+					Semester[i]=p['Semester'];
+					$("#SelectSemester").append(
+						" <option id='" + Semester[i] + "'>"
+						+ Semester[i] + "</option>");
+				});
+			}
+		});//ajax
+	});//change()
+
+	//When users select course, year, semester load options for "select assignment"
+	$("#SelectSemester").change(function() {
+		// When users select course and year, remove all options in semester
+		$("#SelectAssignment option").remove();
+		$("#SelectAssignment").append(
+			" <option id='PleaseSelectSemester'>SelectAssignment</option>");
+		 //Get the course and year user chooses
+		var SelectCourseId=$("#SelectCourse option:selected").attr("id");
+		var SelectYearId=$("#SelectYear option:selected").attr("id");
+		var SelectSemesterId=$("#SelectSemester option:selected").attr("id");				
+		 $.ajax({
+			type: "get",
+			async: true, 
+			url: "controller.php?type=loadAssignment",
+			dataType: "json", 
+			data: {"SelectCourseId":SelectCourseId,"SelectYearId":SelectYearId,"SelectSemesterId":SelectSemesterId},
+			success: function(result) {
+				var AssignmentName = [];
+				$.each(result,function(i,p){
+					AssignmentName[i]=p['AssignmentName'];
+					$("#SelectAssignment").append(
+						" <option id='" + AssignmentName[i] + "'>"
+						+ AssignmentName[i] + "</option>");
+				});
+			}
+		});//ajax
+	});//change()
+
+	//after user chooses assignment, update all charts
+	$('#SelectAssignment').change(function(){
+		submissionTimeDistribution5Days();
+		submissionTimeDistribution5DaysStudent();
+		submissionTimeDistribution96Hours();
+		submissionTimeDistribution96HoursStudent();
+		submissionTimeDistributionSubmission();
+		submissionTimeDistributionStudent();
+		firstSubmissionTimeDistribution();
+		lastSubmissionTimeDistribution();
+		markDistributionUpdate();
+		submissionTimesOfEachStudentUpdate();
+	}) 
+})//DocumentReady()
+</script>
+
+<!-- the chart SubmissionTimeDistribution 5 days (y-axis: Number of submissions) after and before deadline-->
+      <div id="SubmissionTimeDistribution5Days" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative; top: -400px;left: 870px;"></div>
+
+<script type="text/javascript">
+//initialize echarts instance
+var myChartSubmissionTimeDistribution5Days = echarts.init(document.getElementById('SubmissionTimeDistribution5Days'));
+
+// configuration and data of chart
+var option = {
+	title: {
+		text: 'Submission Time Distribution 5 Days (Submissions)'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of submissions',
+	},
+	dataZoom: [
+		{   // dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0, // left
+			end: 100  // right
+		}
+	],
+	series: [
+		{
+			name: 'Number of submissions',
+			type: 'bar',
+			data: []
+		}
+	],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+myChartSubmissionTimeDistribution5Days.setOption(option);
+
+function submissionTimeDistribution5Days(){
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=submissionTimeDistribution5Days",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment},
+		dataType: "json", 
+		success: function(result) {
+			var days = [];
+			var count = [];
+			var dueDate = [];
+			$.each(result,function(i,p){
+				days[i]=p['days'];
+				count[i]=p['count'];
+				dueDate[i]=p['dueDate'];
+			});
+			myChartSubmissionTimeDistribution5Days.hideLoading();
+			myChartSubmissionTimeDistribution5Days.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'Day',
+					data: days,
+				},
+				series: [
+					{
+						name: 'Number of submissions',
+						data: count,
+						markArea: {
+							data: [ 
+								[{
+									name: 'Due day',
+									xAxis: 5
+								}, {
+									xAxis: 5
+								}]
+							]
+						},
+						markLine : {
+							label:{
+								normal:{
+									show:false,
+								}
+							},
+							lineStyle: {
+								normal: {
+									type: 'solid',
+									color: 'blue'
+								}
+							},
+							data : [
+								{ 
+									xAxis: 5 
+								}
+							]
+						}//markLine
+					}
+				]
+			});
+		}
+	})//ajax
+}//function submissionTimeDistribution5Days
+</script>
+
+<!-- the chart Submission Time Distribution 5 days (y-axis: Number of students submit) after and before deadline-->
+      <div id="SubmissionTimeDistribution5DaysStudent" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative; top: -400px;left: 870px;"></div>
+
+<script type="text/javascript">
+//initialize echarts instance
+var myChartSubmissionTimeDistribution5DaysStudent = echarts.init(document.getElementById('SubmissionTimeDistribution5DaysStudent'));
+
+// configuration and data of chart
+var option = {
+	title: {
+		text: 'Submission Time Distribution 5 Days (Students)'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of students submit',
+	},
+	dataZoom: [
+		{   // dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0, // left
+			end: 100  // right
+		}
+	],
+	series: [
+		{
+			name: 'Number of students submit',
+			type: 'bar',
+			data: []
+		}
+	],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+myChartSubmissionTimeDistribution5DaysStudent.setOption(option);
+
+function submissionTimeDistribution5DaysStudent(){
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=submissionTimeDistribution5DaysStudent",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment},
+		dataType: "json", 
+		success: function(result) {
+			var days = [];
+			var count = [];
+			$.each(result,function(i,p){
+				days[i]=p['days'];
+				count[i]=p['count'];
+			});
+			myChartSubmissionTimeDistribution5DaysStudent.hideLoading();
+			myChartSubmissionTimeDistribution5DaysStudent.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'Day',
+					data: days,
+				},
+				series: [
+					{
+						name: 'Number of students submit',
+						data: count,
+						markArea: {
+							data: [ 
+								[{
+									name: 'Due day',
+									xAxis: 5
+								}, {
+									xAxis: 5
+								}]
+							]
+						},
+						markLine : {
+							label:{
+								normal:{
+									show:false,
+								}
+							},
+							lineStyle: {
+								normal: {
+									type: 'solid',
+									color: 'blue'
+								}
+							},
+							data : [
+								{ 
+									xAxis: 5 
+								}
+							]
+						}//markLine
+					}
+				]
+			});
+		}
+	})//ajax
+}//function submissionTimeDistribution5DaysStudent
+</script>
+
+      <!-- the chart SubmissionTimeDistribution 96 hours after and before deadline-->
+      <div id="SubmissionTimeDistribution96Hours" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative; top: -400px;left: 870px;"></div>
+ 
+ <script type="text/javascript">
+//initialize echarts instance
+var myChartSubmissionTimeDistribution96Hours = echarts.init(document.getElementById('SubmissionTimeDistribution96Hours'));
+
+// configuration and data of chart
+var option = {
+	title: {
+		text: 'Submission Time Distribution 96 Hours (Submissions)'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of submissions',
+	},
+	dataZoom: [
+		{   // dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0, // left
+			end: 100  // right
+		}
+	],
+	series: [
+		{
+			name: 'Number of submissions',
+			type: 'bar',
+			data: []
+		}
+	],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+myChartSubmissionTimeDistribution96Hours.setOption(option);
+
+function submissionTimeDistribution96Hours(){
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=submissionTimeDistribution96Hours",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment},
+		dataType: "json", 
+		success: function(result) {
+			var days = [];
+			var count = [];
+			$.each(result,function(i,p){
+				days[i]=p['days'];
+				count[i]=p['count'];
+			});
+			myChartSubmissionTimeDistribution96Hours.hideLoading();
+			myChartSubmissionTimeDistribution96Hours.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'Hour',
+					data: days,
+				},
+				series: [
+					{
+						name: 'Number of submissions',
+						data: count,
+						markArea: {
+							data: [ 
+								[{
+									name: 'Due hour',
+									xAxis: 96
+								}, {
+									xAxis: 96
+								}]
+							]
+						},
+						markLine : {
+							label:{
+								normal:{
+									show:false,
+								}
+							},
+							lineStyle: {
+								normal: {
+									type: 'solid',
+									color: 'blue'
+								}
+							},
+							data : [
+								{ 
+									xAxis: 96 
+								}
+							]
+						}//markLine
+					}
+				]
+			});
+		}
+	})//ajax
+}//function submissionTimeDistribution96Hours
+</script>
+
+     <!-- the chart "Submission Time Distribution 96 hours after and before due hour (y-axis: Number of students submit)"-->
+      <div id="SubmissionTimeDistribution96HoursStudent" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative; top: -400px;left: 870px;"></div>
+ 
+ <script type="text/javascript">
+//initialize echarts instance
+var myChartSubmissionTimeDistribution96HoursStudent = echarts.init(document.getElementById('SubmissionTimeDistribution96HoursStudent'));
+
+// configuration and data of chart
+var option = {
+	title: {
+		text: 'Submission Time Distribution 96 Hours (Students)'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of students submit',
+	},
+	dataZoom: [
+		{   // dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0, // left
+			end: 100  // right
+		}
+	],
+	series: [
+		{
+			name: 'Number of students submit',
+			type: 'bar',
+			data: []
+		}
+	],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+myChartSubmissionTimeDistribution96HoursStudent.setOption(option);
+
+function submissionTimeDistribution96HoursStudent(){
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=submissionTimeDistribution96HoursStudent",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment},
+		dataType: "json", 
+		success: function(result) {
+			var days = [];
+			var count = [];
+			$.each(result,function(i,p){
+				days[i]=p['days'];
+				count[i]=p['count'];
+			});
+			myChartSubmissionTimeDistribution96HoursStudent.hideLoading();
+			myChartSubmissionTimeDistribution96HoursStudent.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'Hour',
+					data: days,
+				},
+				series: [
+					{
+						name: 'Number of students submit',
+						data: count,
+						markArea: {
+							data: [ 
+								[{
+									name: 'Due hour',
+									xAxis: 96
+								}, {
+									xAxis: 96
+								}]
+							]
+						},
+						markLine : {
+							label:{
+								normal:{
+									show:false,
+								}
+							},
+							lineStyle: {
+								normal: {
+									type: 'solid',
+									color: 'blue'
+								}
+							},
+							data : [
+								{ 
+									xAxis: 96 
+								}
+							]
+						}//markLine
+					}
+				]
+			});
+		}
+	})//ajax
+}//function submissionTimeDistribution96HoursStudent
+</script>
+
+     <!-- the chart Submission Time Distribution (y-axis: Number of submissions) -->
+      <div id="SubmissionTimeDistributionSubmission" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative; top: -400px;left: 870px;"></div>
+
+<script type="text/javascript">
+//initialize echarts instance
+var myChartSubmissionTimeDistributionSubmission= echarts.init(document.getElementById('SubmissionTimeDistributionSubmission'));
+
+// configuration and data of chart
+var option = {
+	title: {
+		text: 'Submission Time Distribution (Submissions)'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of submissions',
+	},
+	dataZoom: [
+		{   // dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0, // left
+			end: 100  // right
+		}
+	],
+	series: [
+		{
+			name: 'Number of submissions',
+			type: 'bar',
+			data: []
+		}
+	],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+myChartSubmissionTimeDistributionSubmission.setOption(option);
+
+function submissionTimeDistributionSubmission(){
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=submissionTimeDistributionSubmission",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment},
+		dataType: "json", 
+		success: function(result) {
+			var days = [];
+			var count = [];
+			var dueDay= [];
+			$.each(result,function(i,p){
+				days[i]=p['days'];
+				count[i]=p['count'];
+				dueDay[i]=p['dueDay'];
+			});
+			myChartSubmissionTimeDistributionSubmission.hideLoading();
+			myChartSubmissionTimeDistributionSubmission.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'Day',
+					data: days,
+				},
+				series: [
+					{
+						name: 'Number of submissions',
+						data: count,
+						markArea: {
+							data: [ 
+								[
+									{
+										name: 'Start day',
+										xAxis: 0
+									}, {
+										xAxis: 0
+									}
+								],
+								[
+									{
+										name: 'Due day',
+										xAxis: dueDay[0]
+									}, {
+										xAxis: dueDay[0]
+									}
+								]
+							]
+						},
+						markLine : {
+							label:{
+								normal:{
+									show:false
+								}
+							},
+							lineStyle: {
+								normal: {
+									type: 'solid',
+									color: 'blue'
+								}
+							},
+							data : [
+								{ xAxis: 0 },
+								{ xAxis: dueDay[0] }
+							]
+						}//markLine
+					}
+				]
+			});
+		}
+	})//ajax
+}//function submissionTimeDistributionSubmission
+</script>
+
+      <!-- the chart Submission Time Distribution (y-axis: Number of students submit) -->
+      <div id="SubmissionTimeDistributionStudent" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative; top: -400px;left: 870px;"></div>
+
+<script type="text/javascript">
+//initialize echarts instance
+var myChartSubmissionTimeDistributionStudent= echarts.init(document.getElementById('SubmissionTimeDistributionStudent'));
+
+// configuration and data of chart
+var option = {
+	title: {
+		text: 'Submission Time Distribution (Students)'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of students submit',
+	},
+	dataZoom: [
+		{   // dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0, // left
+			end: 100  // right
+		}
+	],
+	series: [
+		{
+			name: 'Number of students submit',
+			type: 'bar',
+			data: []
+		}
+	],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+myChartSubmissionTimeDistributionStudent.setOption(option);
+
+function submissionTimeDistributionStudent(){
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=submissionTimeDistributionStudent",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment},
+		dataType: "json", 
+		success: function(result) {
+			var days = [];
+			var count = [];
+			var dueDay= [];
+			$.each(result,function(i,p){
+				days[i]=p['days'];
+				count[i]=p['count'];
+				dueDay[i]=p['dueDay'];
+			});
+			myChartSubmissionTimeDistributionStudent.hideLoading();
+			myChartSubmissionTimeDistributionStudent.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'Day',
+					data: days,
+				},
+				series: [
+					{
+						name: 'Number of students submit',
+						data: count,
+						markArea: {
+							data: [ 
+								[
+									{
+										name: 'Start day',
+										xAxis: 0
+									}, {
+										xAxis: 0
+									}
+								],
+								[
+									{
+										name: 'Due day',
+										xAxis: dueDay[0]
+									}, {
+										xAxis: dueDay[0]
+									}
+								]
+							]
+						},
+						markLine : {
+							label:{
+								normal:{
+									show:false
+								}
+							},
+							lineStyle: {
+								normal: {
+									type: 'solid',
+									color: 'blue'
+								}
+							},
+							data : [
+								{ xAxis: 0 },
+								{ xAxis: dueDay[0] }
+							]
+						}//markLine
+					}
+				]
+			});
+		}
+	})//ajax
+}//function submissionTimeDistributionStudent
+</script>
+
+      <!-- the chart FirstSubmissionTimeDistribution -->
+      <div id="FirstSubmissionTimeDistribution" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative; top: -400px;left: 870px;"></div>
+
+<script type="text/javascript">
+//initialize echarts instance
+var myChartFirstSubmissionTimeDistribution= echarts.init(document.getElementById('FirstSubmissionTimeDistribution'));
+
+// configuration and data of chart
+var option = {
+	title: {
+		text: 'First Submission Time Distribution'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of submissions',
+	},
+	dataZoom: [
+		{   // dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0, // left
+			end: 100  // right
+		}
+	],
+	series: [
+		{
+			name: 'Number of submissions',
+			type: 'bar',
+			data: []
+		}
+	],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+myChartFirstSubmissionTimeDistribution.setOption(option);
+
+function firstSubmissionTimeDistribution(){
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=firstSubmissionTimeDistribution",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment},
+		dataType: "json", 
+		success: function(result) {
+			var days = [];
+			var count = [];
+			var dueDay= [];
+			$.each(result,function(i,p){
+				days[i]=p['days'];
+				count[i]=p['count'];
+				dueDay[i]=p['dueDay'];
+			});
+			myChartFirstSubmissionTimeDistribution.hideLoading();
+			myChartFirstSubmissionTimeDistribution.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'Day',
+					data: days,
+				},
+				series: [
+					{
+						name: 'Number of submissions',
+						data: count,
+						markArea: {
+							data: [ 
+								[
+									{
+										name: 'Start day',
+										xAxis: 0
+									}, {
+										xAxis: 0
+									}
+								],
+								[
+									{
+										name: 'Due day',
+										xAxis: dueDay[0]
+									}, {
+										xAxis: dueDay[0]
+									}
+								]
+							]
+						},
+						markLine : {
+							label:{
+								normal:{
+									show:false
+								}
+							},
+							lineStyle: {
+								normal: {
+									type: 'solid',
+									color: 'blue'
+								}
+							},
+							data : [
+								{ xAxis: 0 },
+								{ xAxis: dueDay[0] }
+							]
+						}//markLine
+					}
+				]
+			});
+		}
+	})//ajax
+}//function firstSubmissionTimeDistribution
+</script>
+
+      <!-- the chart LastSubmissionTimeDistribution -->
+      <div id="LastSubmissionTimeDistribution" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative; top: -400px;left: 870px;"></div>
+
+<script type="text/javascript">
+//initialize echarts instance
+var myChartLastSubmissionTimeDistribution= echarts.init(document.getElementById('LastSubmissionTimeDistribution'));
+
+// configuration and data of chart
+var option = {
+	title: {
+		text: 'Last Submission Time Distribution'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of submissions',
+	},
+	dataZoom: [
+		{   // dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0, // left
+			end: 100  // right
+		}
+	],
+	series: [
+		{
+			name: 'Number of submissions',
+			type: 'bar',
+			data: []
+		}
+	],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+myChartLastSubmissionTimeDistribution.setOption(option);
+
+function lastSubmissionTimeDistribution(){
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+
+	$.ajax({
+		type: "get",
+		async: true, 
+		url: "controller.php?type=lastSubmissionTimeDistribution",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment},
+		dataType: "json", 
+		success: function(result) {
+			var days = [];
+			var count = [];
+			var dueDay= [];
+			$.each(result,function(i,p){
+				days[i]=p['days'];
+				count[i]=p['count'];
+				dueDay[i]=p['dueDay'];
+			});
+			myChartLastSubmissionTimeDistribution.hideLoading();
+			myChartLastSubmissionTimeDistribution.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'Day',
+					data: days,
+				},
+				series: [
+					{
+						name: 'Number of submissions',
+						data: count,
+						markArea: {
+							data: [ 
+								[
+									{
+										name: 'Start day',
+										xAxis: 0
+									}, {
+										xAxis: 0
+									}
+								],
+								[
+									{
+										name: 'Due day',
+										xAxis: dueDay[0]
+									}, {
+										xAxis: dueDay[0]
+									}
+								]
+							]
+						},
+						markLine : {
+							label:{
+								normal:{
+									show:false
+								}
+							},
+							lineStyle: {
+								normal: {
+									type: 'solid',
+									color: 'blue'
+								}
+							},
+							data : [
+								{ xAxis: 0 },
+								{ xAxis: dueDay[0] }
+							]
+						}//markLine
+					}
+				]
+			});
+		}
+	})//ajax
+}//function lastSubmissionTimeDistribution
+</script>
+
+      <!-- the chart "Submission Times Of Each Student"-->
+      <div id="SubmissionTimesOfEachStudent" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative;top: -400px;left: 870px;">
+	    <label for="SubmissionTimesOfEachStudentSelect">Change Presentation Order</label>
+		<select id="SubmissionTimesOfEachStudentSelect">
+		  <option  value ="1" selected = "selected">Alphabetical order</option>
+		  <option value ="2">Descending order</option>
+		  <option value="3">Ascending order</option>
+		</select></br></br>
+      </div>
+
+<script type="text/javascript">
+// initialize echarts instance
+var myChartSubmissionTimesOfEachStudent = echarts.init(document.getElementById('SubmissionTimesOfEachStudent'));
+
+// set configuration items and data
+var option = {
+	title: {
+		text: 'Number Of Submissions Of Each Student'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of submissions'
+	},
+	dataZoom: [
+		{   //dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0, // left position 0%
+			end: 100  // right position 100%
+		}
+	],
+	series: [
+		{
+			name: 'Number of submissions',
+			type: 'bar',
+			data: []
+		}
+	],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+// display chart using the configuration items and data set
+myChartSubmissionTimesOfEachStudent.setOption(option);
+
+function submissionTimesOfEachStudentUpdate(){
+	var order=$('#SubmissionTimesOfEachStudentSelect').val();
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+
+	$.ajax({
+		type: "get",
+		async: true, //asynchronous
+		url: "controller.php?type=numberOfSubmissionsOfEachStudent",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment,"order":order},
+		dataType: "json", //return data in JSON format
+		success: function(result) {
+			var FKUserId = [];
+			var count = [];
+			$.each(result,function(i,p){
+				FKUserId[i]=p['FKUserId'];
+				count[i]=p['count'];
+			});
+			myChartSubmissionTimesOfEachStudent.hideLoading();
+			myChartSubmissionTimesOfEachStudent.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'User name',
+					data: FKUserId
+				},
+				series: [{
+					name: 'Number of submissions',
+					data: count
+				}]
+			});
+		}
+	});//ajax
+}//function
+
+//When user changes the presentation order, undate the chart "Submission Times Of Each Student"
+$(document).ready(function(){ 
+	$('#SubmissionTimesOfEachStudentSelect').change(function(){ 
+		submissionTimesOfEachStudentUpdate();
+	}) 
+}) 
+</script>
+
+      <div id="MarkDistribution" style="width: 800px;height:400px;"></div>
+      <div style="width: 200px;height:100px;position: relative;top: -400px;left: 870px;">
+        <label for="MarkDistributionSelect">Configuration option </label>
+		<select id="MarkDistributionSelect">
+		  <option  value ="1" selected = "selected">By GPA</option>
+		  <option value ="2">By 10% step</option>
+		</select>
+	  </div>
+
+<script type="text/javascript">
+// initialize echart instance
+var myChartMarkDistribution = echarts.init(document.getElementById('MarkDistribution'));
+
+// configure items and data
+var option = {
+	title: {
+		text: 'Mark Distribution'
+	},
+	tooltip: {},
+	xAxis: {
+		data: []
+	},
+	yAxis: {
+		name: 'Number of students'
+	},
+	dataZoom: [
+		{   //dataZoom component controls x-axis by default
+			type: 'slider', 
+			start: 0,      // left position 0% 
+			end: 100         // right position 100% 
+		}
+	],
+	series: [{
+		name: 'Mark',
+		type: 'bar',
+		data: []
+	}],
+	toolbox: {
+		show: true,
+		feature: {
+			dataView: {readOnly: false},
+			magicType: {type: ['line', 'bar']},
+			restore: {},
+			saveAsImage: {}
+		}
+	}
+};
+
+// display chart using the configuration items and data set
+myChartMarkDistribution.setOption(option);
+
+function markDistributionUpdate(){
+	var SelectCourse=$("#SelectCourse option:selected").attr("id");
+	var SelectYear=$("#SelectYear option:selected").attr("id");
+	var SelectSemester=$("#SelectSemester option:selected").attr("id");
+	var SelectAssignment=$("#SelectAssignment option:selected").attr("id");
+	var MarkDistributionSelect=$('#MarkDistributionSelect').val();
+
+	$.ajax({
+		type: "get",
+		async: true, //asynchronous
+		url: "controller.php?type=markDistribution",
+		data: {"SelectCourse":SelectCourse,"SelectYear":SelectYear,"SelectSemester":SelectSemester,"SelectAssignment":SelectAssignment,"MarkDistributionSelect":MarkDistributionSelect},
+		dataType: "json", //return data in JSON format
+		success: function(result) {
+			var grade = [];
+			var count = [];
+			$.each(result,function(i,p){
+				grade[i]=p['grade'];
+				count[i]=p['count'];
+			});
+			myChartMarkDistribution.hideLoading();
+			myChartMarkDistribution.setOption({
+				xAxis: {
+					axisLabel :{
+						interval: 'auto', 
+						rotate:0
+					},
+					name: 'Mark',
+					data: grade
+				},
+				series: [{
+					name: 'Number of students',
+					data: count
+				}]
+			});
+		}
+	});//ajax
+}//function
+
+//after user chooses configuration option for Mark Distribution Chart, update the Mark Distribution Chart
+$(document).ready(function(){ 
+	$('#MarkDistributionSelect').change(function(){ 
+		markDistributionUpdate();
+	}) 
+}) 
+</script>
+
+    </main>
+  </div>
+</div>
+
+<!-- Footer  -->
+<script>window.jQuery || document.write('<script src="../../assets/js/vendor/jquery.min.js"><\/script>')</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.0/js/tether.min.js"
+        integrity="sha384-DztdAPBWPRXSA/3eYEEUWrWCy7G5KFbe8fFjk5JAIxUYHKkDx6Qin1DkWx51bBrb"
+        crossorigin="anonymous"></script>
+<script src="../js/bootstrap.min.js"></script>
+<script src="../js/ie10-viewport-bug-workaround.js"></script>
+</body>
+</html>
